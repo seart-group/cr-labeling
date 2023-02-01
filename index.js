@@ -30,21 +30,21 @@ app.get("/", function (req, res) {
     res.send("Hello World");
 });
 
-app.get("/reviewers", function (_, res, next) {
+app.get("/reviewers", (_, res, next) => {
     pool.query("SELECT * FROM reviewer", function (error, results) {
         if (error) next(error);
         res.status(200).send(results.rows);
     });
 });
 
-app.get("/labels", function (_, res, next) {
-    pool.query("SELECT * FROM label", function (error, results) {
+app.get("/labels", (_, res, next) => {
+    pool.query("SELECT * FROM label", (error, results) => {
         if (error) next(error);
         res.status(200).send(results.rows);
     });
 });
 
-app.post("/login", function (req, res) {
+app.post("/login", (req, res) => {
     const name = req.body.name;
     res.status(200);
     res.send(`Logged in as: ${name}`);
