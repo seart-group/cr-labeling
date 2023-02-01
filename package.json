@@ -4,8 +4,7 @@
   "private": true,
   "description": "Manual Code Review Labelling Platform",
   "main": "index.js",
-  "scripts": {
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/seart-group/cr-labeling.git"
@@ -20,6 +19,7 @@
     "nodemon": "^2.0.20"
   },
   "dependencies": {
+    "dotenv": "^16.0.3",
     "express": "^4.18.2"
   }
 }
