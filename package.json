@@ -16,6 +16,7 @@
   },
   "homepage": "https://github.com/seart-group/cr-labeling#readme",
   "devDependencies": {
+    "eslint": "^8.33.0",
     "nodemon": "^2.0.20"
   },
   "dependencies": {
