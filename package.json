@@ -1,0 +1,19 @@
+{
+  "name": "cr-labeling",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Manual Code Review Labelling Platform",
+  "main": "index.js",
+  "scripts": {
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/seart-group/cr-labeling.git"
+  },
+  "author": "Ozren Dabic <dabico@usi.ch>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/seart-group/cr-labeling/issues"
+  },
+  "homepage": "https://github.com/seart-group/cr-labeling#readme"
+}
