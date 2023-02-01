@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/seart-group/cr-labeling/issues"
   },
-  "homepage": "https://github.com/seart-group/cr-labeling#readme"
+  "homepage": "https://github.com/seart-group/cr-labeling#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
 }
