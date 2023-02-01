@@ -1,3 +1,5 @@
+const { Pool } = require("pg");
+
 require("dotenv").config();
 const express = require("express");
 const nodeEnv = process.env.NODE_ENV || "development";
@@ -5,6 +7,15 @@ const logger = require("morgan");
 const bodyParser = require("body-parser");
 const app = express();
 const port = process.env.PORT || 3000;
+
+const pool = new Pool({
+    host: process.env.DB_HOST || "localhost",
+    user: process.env.DB_USER || "cr_labeling_admin",
+    database: process.env.DB_NAME || "cr_labeling",
+    password: process.env.DB_PASS || undefined,
+    port: process.env.DB_PORT || 5432,
+    max: 5
+});
 
 if (nodeEnv === "development") {
     app.use(logger("dev"));
@@ -17,6 +28,20 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get("/", function (req, res) {
     res.send("Hello World");
+});
+
+app.get("/reviewers", function (_, res, next) {
+    pool.query("SELECT * FROM reviewer", function (error, results) {
+        if (error) next(error);
+        res.status(200).send(results.rows);
+    });
+});
+
+app.get("/labels", function (_, res, next) {
+    pool.query("SELECT * FROM label", function (error, results) {
+        if (error) next(error);
+        res.status(200).send(results.rows);
+    });
 });
 
 app.post("/login", function (req, res) {
