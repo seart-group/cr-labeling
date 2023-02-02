@@ -71,11 +71,14 @@ app.get("/:name/review", async (req, res) => {
 });
 
 app.get("/error", (_, res) => {
-    res.render("5XX");
+    res.render("error");
 });
 
 app.get("*", (_, res) => {
-    res.render("404");
+    res.render("error", {
+        icon: "bi-emoji-dizzy-fill",
+        title: "Page Not Found!"
+    });
 });
 
 app.listen(port, () => {

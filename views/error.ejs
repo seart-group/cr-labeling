@@ -5,8 +5,16 @@
         <header></header>
         <main>
             <h1 class="text-center mb-3">
-                <i class="bi bi-emoji-dizzy-fill"></i>
-                Page Not Found!
+                <% if (locals.icon) { %>
+                    <i class="bi <%= locals.icon %>"></i>
+                <% } else { %>
+                    <i class="bi bi-bug-fill"></i>
+                <% } %>
+                <% if (locals.title) { %>
+                    <%= locals.title %>
+                <% } else { %>
+                    An Unexpected Error Has Occurred!
+                <% } %>
             </h1>
             <div class="d-flex justify-content-center">
                 <a href="/">
