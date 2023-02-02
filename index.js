@@ -24,6 +24,9 @@ if (nodeEnv === "development") {
     app.use(morgan("combined"));
 }
 
+app.set("views", "./views");
+app.set("view engine", "ejs");
+
 app.use("/", express.static(path.join(__dirname, "public")));
 
 app.use(bodyParser.json());
