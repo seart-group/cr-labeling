@@ -71,6 +71,10 @@ app.post("/login", (req, res) => {
     res.status(200).send(`Logged in as: ${name}`);
 });
 
+app.get("/error", (_, res) => {
+    res.render("5XX");
+});
+
 app.get("*", (_, res) => {
     res.render("404");
 });
