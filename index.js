@@ -71,6 +71,10 @@ app.post("/login", (req, res) => {
     res.status(200).send(`Logged in as: ${name}`);
 });
 
+app.get("*", (_, res) => {
+    res.render("404");
+});
+
 app.listen(port, () => {
     if (nodeEnv === "development") {
         console.log(`App listening on: http://localhost:${port}`);
