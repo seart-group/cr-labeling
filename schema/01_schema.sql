@@ -26,7 +26,7 @@ CREATE TABLE "instance" (
   "input_nl" text,
   "output" text,
   "target" text,
-  "discarded" boolean
+  "discarded" boolean DEFAULT false
 );
 
 CREATE TABLE "reviewer" (
@@ -44,7 +44,7 @@ CREATE TABLE "instance_review" (
   "instance_id" integer,
   "reviewer_id" integer,
   "is_interesting" boolean NOT NULL DEFAULT false,
-  "reviewed_at" timestamp
+  "reviewed_at" timestamp DEFAULT (now())
 );
 
 CREATE TABLE "instance_review_label" (
