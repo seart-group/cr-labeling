@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('./partials/head'); %>
+    <body class="d-flex flex-column justify-content-between">
+        <header>
+            <% if (!!reviewer.name) { %>
+                <nav class="navbar bg-light">
+                    <div class="container-fluid">
+                        <div>
+                            <i class="bi bi-person-fill"></i>
+                            <span class="navbar-brand mb-0 h1">
+                                <%= reviewer.name %>
+                            </span>
+                        </div>
+                    </div>
+                </nav>
+            <% } else { %>
+
+            <% } %>
+        </header>
+        <main>
+            <% if (!!reviewer.id && !!reviewer.name) { %>
+                <div class="container">
+                    <h1 class="text-center mb-3">
+                        Welcome <%= reviewer.name %> (id: <%= reviewer.id %>)!
+                    </h1>
+                </div>
+            <% } else { %>
+                <h1 class="text-center mb-3">
+                    <i class="bi bi-emoji-dizzy-fill"></i>
+                    You Must Log In First!
+                </h1>
+                <div class="d-flex justify-content-center">
+                    <a href="/">
+                        <button type="button" class="btn btn-dark">Take Me Back!</button>
+                    </a>
+                </div>
+            <% } %>
+        </main>
+        <%- include('./partials/footer'); %>
+        <%- include('./partials/scripts'); %>
+    </body>
+</html>

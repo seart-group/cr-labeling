@@ -71,6 +71,11 @@ app.post("/login", (req, res) => {
     res.status(200).send(`Logged in as: ${name}`);
 });
 
+app.get("/:name/review", async (req, res) => {
+    const { rows } = await pool.query("SELECT * FROM reviewer WHERE name = $1", [ req.params.name ]);
+    res.render("review", { reviewer: rows[0] });
+});
+
 app.get("/error", (_, res) => {
     res.render("5XX");
 });
