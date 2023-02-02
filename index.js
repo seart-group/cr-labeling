@@ -36,9 +36,23 @@ app.get("/reviewers", (_, res, next) => {
         .catch(next);
 });
 
+app.post("/reviewers", (req, res, next) => {
+    const name = req.body.name;
+    pool.query("INSERT INTO reviewer(name) VALUES ($1) RETURNING *", [ name ])
+        .then(results => { res.status(201).send(results.rows[0]); })
+        .catch(next);
+});
+
 app.get("/labels", (_, res, next) => {
     pool.query("SELECT * FROM label")
         .then(results => { res.status(200).send(results.rows); })
+        .catch(next);
+});
+
+app.post("/labels", (req, res, next) => {
+    const name = req.body.name;
+    pool.query("INSERT INTO label(name) VALUES ($1) RETURNING *", [ name ])
+        .then(results => { res.status(201).send(results.rows[0]); })
         .catch(next);
 });
 
