@@ -66,9 +66,16 @@ app.get("/login", (_, res) => {
     res.render("login");
 });
 
-app.post("/login", (req, res) => {
+app.post("/login", async (req, res) => {
     const name = req.body.name;
-    res.status(200).send(`Logged in as: ${name}`);
+    let target = `${name}/review`;
+    try {
+        await pool.query("INSERT INTO reviewer(name) VALUES ($1) RETURNING *", [ name ]);
+    } catch ({ code }) {
+        if (code !== "23505") target = "/error";
+    } finally {
+        res.redirect(`${req.baseUrl}/${target}`);
+    }
 });
 
 app.get("/:name/review", async (req, res) => {
