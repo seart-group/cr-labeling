@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('./partials/head'); %>
+    <body class="d-flex flex-column justify-content-between">
+        <header></header>
+        <main>
+            <h1 class="text-center mb-3">Login</h1>
+            <div class="d-flex justify-content-center">
+                <form id="login-form"
+                      action="/login"
+                      method="post"
+                      autocomplete="on"
+                      class="row row-cols-lg-auto g-3 align-items-center"
+                >
+                    <div class="col-12">
+                        <label class="visually-hidden" for="reviewer-name">Reviewer</label>
+                        <div class="input-group">
+                            <div class="input-group-text">
+                                <i class="bi bi-person-fill"></i>
+                            </div>
+                            <input type="text"
+                                   id="reviewer-name"
+                                   name="name"
+                                   class="form-control"
+                                   placeholder="reviewer"
+                                   autocomplete="username"
+                                   autofocus
+                                   required
+                            />
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-dark">Go!</button>
+                    </div>
+                </form>
+            </div>
+        </main>
+        <%- include('./partials/footer'); %>
+        <%- include('./partials/scripts'); %>
+    </body>
+</html>

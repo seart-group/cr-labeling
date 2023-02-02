@@ -58,6 +58,14 @@ app.post("/labels", (req, res, next) => {
         .catch(next);
 });
 
+app.get("/", (req, res) => {
+    res.redirect(req.baseUrl + "/login");
+});
+
+app.get("/login", (_, res) => {
+    res.render("login");
+});
+
 app.post("/login", (req, res) => {
     const name = req.body.name;
     res.status(200).send(`Logged in as: ${name}`);
