@@ -17,7 +17,12 @@
 <body class="login">
     <h1 class="text-center mb-3">Login</h1>
     <div class="d-flex justify-content-center">
-        <form class="row row-cols-lg-auto g-3 align-items-center" autocomplete="on">
+        <form id="login-form"
+              action="/login"
+              method="post"
+              autocomplete="on"
+              class="row row-cols-lg-auto g-3 align-items-center"
+        >
             <div class="col-12">
                 <label class="visually-hidden" for="reviewer-name">Reviewer</label>
                 <div class="input-group">
@@ -26,6 +31,7 @@
                     </div>
                     <input type="text"
                            id="reviewer-name"
+                           name="name"
                            class="form-control"
                            placeholder="reviewer"
                            autocomplete="username"
