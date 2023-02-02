@@ -1,6 +1,7 @@
 const { Pool } = require("pg");
 
 require("dotenv").config();
+const path = require("path");
 const express = require("express");
 const nodeEnv = process.env.NODE_ENV || "development";
 const logger = require("morgan");
@@ -23,12 +24,10 @@ if (nodeEnv === "development") {
     app.use(logger("combined"));
 }
 
+app.use("/", express.static(path.join(__dirname, "public")));
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
-app.get("/", function (req, res) {
-    res.send("Hello World");
-});
 
 app.get("/reviewers", (_, res, next) => {
     pool.query("SELECT * FROM reviewer")
