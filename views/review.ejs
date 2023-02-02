@@ -14,16 +14,23 @@
                         </div>
                     </div>
                 </nav>
-            <% } else { %>
-
             <% } %>
         </header>
         <main>
             <% if (!!reviewer.id && !!reviewer.name) { %>
                 <div class="container">
-                    <h1 class="text-center mb-3">
-                        Welcome <%= reviewer.name %> (id: <%= reviewer.id %>)!
-                    </h1>
+                    <div class="row">
+                        <div class="col">
+                            <label for="label-select">
+                                Select Labels
+                            </label>
+                            <select id="label-select" class="form-select" multiple size="10">
+                                <% labels.forEach(label => { %>
+                                    <option value="<%- label.id %>"><%- label.name %></option>
+                                <% }) %>
+                            </select>
+                        </div>
+                    </div>
                 </div>
             <% } else { %>
                 <h1 class="text-center mb-3">

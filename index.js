@@ -53,8 +53,12 @@ app.post("/login", async (req, res) => {
 });
 
 app.get("/:name/review", async (req, res) => {
-    const { rows } = await pool.query("SELECT * FROM reviewer WHERE name = $1", [ req.params.name ]);
-    res.render("review", { reviewer: rows[0] });
+    const { rows: reviewers } = await pool.query("SELECT * FROM reviewer WHERE name = $1", [ req.params.name ]);
+    const { rows: labels } = await pool.query("SELECT * FROM label");
+    res.render("review", {
+        reviewer: reviewers[0],
+        labels: labels
+    });
 });
 
 app.post("/label", (req, res) => {
