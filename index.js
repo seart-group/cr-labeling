@@ -31,23 +31,20 @@ app.get("/", function (req, res) {
 });
 
 app.get("/reviewers", (_, res, next) => {
-    pool.query("SELECT * FROM reviewer", function (error, results) {
-        if (error) next(error);
-        res.status(200).send(results.rows);
-    });
+    pool.query("SELECT * FROM reviewer")
+        .then(results => { res.status(200).send(results.rows); })
+        .catch(next);
 });
 
 app.get("/labels", (_, res, next) => {
-    pool.query("SELECT * FROM label", (error, results) => {
-        if (error) next(error);
-        res.status(200).send(results.rows);
-    });
+    pool.query("SELECT * FROM label")
+        .then(results => { res.status(200).send(results.rows); })
+        .catch(next);
 });
 
 app.post("/login", (req, res) => {
     const name = req.body.name;
-    res.status(200);
-    res.send(`Logged in as: ${name}`);
+    res.status(200).send(`Logged in as: ${name}`);
 });
 
 app.listen(port);
