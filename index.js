@@ -4,7 +4,7 @@ require("dotenv").config();
 const path = require("path");
 const express = require("express");
 const nodeEnv = process.env.NODE_ENV || "development";
-const logger = require("morgan");
+const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const app = express();
 const port = process.env.PORT || 3000;
@@ -19,9 +19,9 @@ const pool = new Pool({
 });
 
 if (nodeEnv === "development") {
-    app.use(logger("dev"));
+    app.use(morgan("dev"));
 } else {
-    app.use(logger("combined"));
+    app.use(morgan("combined"));
 }
 
 app.use("/", express.static(path.join(__dirname, "public")));
@@ -60,4 +60,8 @@ app.post("/login", (req, res) => {
     res.status(200).send(`Logged in as: ${name}`);
 });
 
-app.listen(port);
+app.listen(port, () => {
+    if (nodeEnv === "development") {
+        console.log(`App listening on: http://localhost:${port}`);
+    }
+});
