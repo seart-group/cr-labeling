@@ -21,14 +21,19 @@
                 <div class="container">
                     <div class="row">
                         <div class="col">
-                            <label for="label-select">
-                                Select Labels
-                            </label>
-                            <select id="label-select" class="form-select" multiple size="10">
-                                <% labels.forEach(label => { %>
-                                    <option value="<%- label.id %>"><%- label.name %></option>
-                                <% }) %>
-                            </select>
+                            <div class="mb-3">
+                                <label for="label-select" class="mb-2">
+                                    Select Labels
+                                </label>
+                                <select id="label-select" class="form-select mb-2" size="10" multiple>
+                                    <% labels.forEach(label => { %>
+                                        <option value="<%- label.id %>"><%- label.name %></option>
+                                    <% }) %>
+                                </select>
+                                <p class="text-center text-muted user-select-none border rounded">
+                                    Hold <i class="bi bi-command"></i> to select multiple labels
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
