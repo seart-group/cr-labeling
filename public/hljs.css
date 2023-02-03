@@ -1,3 +1,16 @@
 pre code.hljs {
     height: 250px!important;
 }
+
+.hljs-ln-numbers {
+    user-select: none;
+    text-align: center;
+    color: #ccc;
+    border-right: 1px solid #CCC;
+    vertical-align: top;
+    padding-right: 5px!important;
+}
+
+.hljs-ln-code {
+    padding-left: 10px!important;
+}
