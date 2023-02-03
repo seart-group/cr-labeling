@@ -1,4 +1,5 @@
 const { Pool } = require("pg");
+const { PostgresError: PGError } = require("pg-error-enum");
 
 require("dotenv").config();
 const path = require("path");
@@ -46,7 +47,7 @@ app.post("/login", async (req, res) => {
     try {
         await pool.query("INSERT INTO reviewer(name) VALUES ($1) RETURNING *", [ name ]);
     } catch ({ code }) {
-        if (code !== "23505") target = "/error";
+        if (code !== PGError.UNIQUE_VIOLATION) target = "/error";
     } finally {
         res.redirect(`${req.baseUrl}/${target}`);
     }
@@ -65,9 +66,8 @@ app.post("/label", (req, res) => {
     pool.query("INSERT INTO label(name) VALUES ($1) RETURNING *", [ req.body.name ])
         .then(({ rows }) => { res.status(201).send(rows[0]); })
         .catch(({ code }) => {
-            if (code !== "23505") res.status(500);
-            else res.status(409);
-            res.end();
+            const status = code === PGError.UNIQUE_VIOLATION ? 409 : 500;
+            res.status(status).end();
         });
 });
 
