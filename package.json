@@ -12,7 +12,11 @@
     "type": "git",
     "url": "git+https://github.com/seart-group/cr-labeling.git"
   },
-  "author": "Ozren Dabic <dabico@usi.ch>",
+  "author": {
+    "name": "Ozren Dabić",
+    "email": "dabico@usi.ch",
+    "url": "https://dabico.github.io/"
+  },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/seart-group/cr-labeling/issues"
