@@ -51,7 +51,7 @@ app.post("/login", async (req, res) => {
 
 app.get("/:name/review", async (req, res) => {
     const { rows: reviewers } = await pool.query("SELECT * FROM reviewer WHERE name = $1", [ req.params.name ]);
-    const { rows: labels } = await pool.query("SELECT * FROM label ORDER BY name");
+    const { rows: labels } = await pool.query("SELECT * FROM label ORDER BY id");
     const { rows: instances } = await pool.query("SELECT * FROM instance TABLESAMPLE SYSTEM_ROWS(1)");
     res.render("review", {
         reviewer: reviewers[0],
