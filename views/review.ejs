@@ -3,7 +3,7 @@
     <%- include('./partials/head'); %>
     <body class="vh-100 vw-100 d-flex flex-column justify-content-between">
         <header>
-            <% if (!!reviewer.name) { %>
+            <% if (!!reviewer) { %>
                 <nav class="navbar bg-light">
                     <div class="container-fluid">
                         <div>
@@ -17,7 +17,7 @@
             <% } %>
         </header>
         <main>
-            <% if (!!reviewer.id && !!reviewer.name) { %>
+            <% if (!!reviewer) { %>
                 <div class="container">
                     <div class="row">
                         <div class="col">
