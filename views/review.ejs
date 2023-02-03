@@ -27,17 +27,17 @@
                     <div class="row">
                         <div class="col overflow-hidden">
                             <label class="mb-2">Input Source Code</label>
-                            <pre class="border rounded"><code><%- instance.input_code %></code></pre>
+                            <pre class="border rounded"><code class="language-java"><%- instance.input_code %></code></pre>
                             <label class="mb-2">Input Comment</label>
-                            <pre class="border rounded"><code><%- instance.input_nl %></code></pre>
+                            <pre class="border rounded"><code class="language-plaintext"><%- instance.input_nl %></code></pre>
                         </div>
                         <div class="col-auto vr g-0"></div>
                         <div class="col overflow-hidden">
                             <label class="mb-2">Actual Output</label>
-                            <pre class="border rounded"><code><%- instance.output %></code></pre>
+                            <pre class="border rounded"><code class="language-<%- instance.task === "C&NL2C" ? "java" : "plaintext" %>"><%- instance.output %></code></pre>
                             <% if (!!instance.target) { %>
                                 <label class="mb-2">Expected Output</label>
-                                <pre class="border rounded"><code><%- instance.target %></code></pre>
+                                <pre class="border rounded"><code class="language-<%- instance.task === "C&NL2C" ? "java" : "plaintext" %>"><%- instance.target %></code></pre>
                             <% } %>
                         </div>
                         <div class="col-12">
@@ -116,6 +116,9 @@
                     .then(() => history.go())
                     .catch(() => new bootstrap.Toast(labelAddToast).show())
             })
+        </script>
+        <script>
+            hljs.highlightAll();
         </script>
     </body>
 </html>
