@@ -4,7 +4,10 @@
   "private": true,
   "description": "Manual Code Review Labelling Platform",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "start": "NODE_ENV=production node index.js",
+    "dev": "nodemon index.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/seart-group/cr-labeling.git"
