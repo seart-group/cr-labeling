@@ -47,7 +47,7 @@ app.post("/login", async (req, res) => {
     try {
         await pool.query("INSERT INTO reviewer(name) VALUES ($1) RETURNING *", [ name ]);
     } catch ({ code }) {
-        if (code !== PGError.UNIQUE_VIOLATION) target = "/error";
+        if (code !== PGError.UNIQUE_VIOLATION) target = "error";
     } finally {
         res.redirect(`${req.baseUrl}/${target}`);
     }
