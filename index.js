@@ -51,7 +51,7 @@ app.post("/login", async (req, res) => {
 
 app.get("/:name/review", async (req, res) => {
     const { rows: reviewers } = await pool.query("SELECT * FROM reviewer WHERE name = $1", [ req.params.name ]);
-    const { rows: labels } = await pool.query("SELECT * FROM label");
+    const { rows: labels } = await pool.query("SELECT * FROM label ORDER BY name");
     res.render("review", {
         reviewer: reviewers[0],
         labels: labels
