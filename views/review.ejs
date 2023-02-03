@@ -103,6 +103,7 @@
         <%- include('./partials/footer'); %>
         <%- include('./partials/scripts'); %>
         <script>
+            const labelSelect = document.getElementById("label-select");
             const labelAddForm = document.getElementById("label-add");
             const labelAddInput = document.getElementById("label-add-input");
             const labelAddToast = document.getElementById("label-add-toast");
@@ -113,7 +114,12 @@
                 labelAddInput.value = null;
 
                 axios.post("/label", { name: label })
-                    .then(() => history.go())
+                    .then(({ data }) => {
+                        const option = document.createElement("option");
+                        option.value = data.id;
+                        option.innerHTML = data.name;
+                        labelSelect.appendChild(option);
+                    })
                     .catch(() => new bootstrap.Toast(labelAddToast).show())
             })
         </script>
