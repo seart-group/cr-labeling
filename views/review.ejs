@@ -21,6 +21,26 @@
                 <div class="container">
                     <div class="row">
                         <div class="col">
+                            <h1 class="text-center m-3">Task: <%- instance.task %></h1>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col overflow-hidden">
+                            <label class="mb-2">Input Source Code</label>
+                            <pre class="border rounded"><code><%- instance.input_code %></code></pre>
+                            <label class="mb-2">Input Comment</label>
+                            <pre class="border rounded"><code><%- instance.input_nl %></code></pre>
+                        </div>
+                        <div class="col-auto vr g-0"></div>
+                        <div class="col overflow-hidden">
+                            <label class="mb-2">Actual Output</label>
+                            <pre class="border rounded"><code><%- instance.output %></code></pre>
+                            <% if (!!instance.target) { %>
+                                <label class="mb-2">Expected Output</label>
+                                <pre class="border rounded"><code><%- instance.target %></code></pre>
+                            <% } %>
+                        </div>
+                        <div class="col-12">
                             <div class="mb-3">
                                 <label for="label-select" class="mb-2">
                                     Select Labels
