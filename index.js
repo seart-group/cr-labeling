@@ -19,11 +19,7 @@ const pool = new Pool({
     max: 5
 });
 
-if (nodeEnv === "development") {
-    app.use(morgan("dev"));
-} else {
-    app.use(morgan("combined"));
-}
+app.use(morgan( nodeEnv === "development" ? "dev" : "combined" ));
 
 app.set("views", "./views");
 app.set("view engine", "ejs");
