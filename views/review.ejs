@@ -27,68 +27,17 @@
                     <div class="row">
                         <div class="col overflow-hidden">
                             <label class="mb-2">Input Source Code</label>
-                            <pre class="border rounded"><code class="language-java"><%- instance.input_code %></code></pre>
+                            <pre class="border rounded"><code class="language-java"><%- instance.input_code || " "  %></code></pre>
                             <label class="mb-2">Input Comment</label>
-                            <pre class="border rounded"><code class="language-plaintext"><%- instance.input_nl %></code></pre>
+                            <pre class="border rounded"><code class="language-plaintext"><%- instance.input_nl || " "  %></code></pre>
                         </div>
                         <div class="col-auto vr g-0"></div>
                         <div class="col overflow-hidden">
+                            <% const language = instance.task === "C&NL2C" ? "java" : "plaintext" %>
                             <label class="mb-2">Actual Output</label>
-                            <pre class="border rounded"><code class="language-<%- instance.task === "C&NL2C" ? "java" : "plaintext" %>"><%- instance.output %></code></pre>
-                            <% if (!!instance.target) { %>
-                                <label class="mb-2">Expected Output</label>
-                                <pre class="border rounded"><code class="language-<%- instance.task === "C&NL2C" ? "java" : "plaintext" %>"><%- instance.target %></code></pre>
-                            <% } %>
-                        </div>
-                        <div class="col-12">
-                            <div class="mb-3">
-                                <label for="label-select" class="mb-2">
-                                    Select Labels
-                                </label>
-                                <select id="label-select" class="form-select mb-2" size="10" multiple>
-                                    <% labels.forEach(label => { %>
-                                        <option value="<%- label.id %>"><%- label.name %></option>
-                                    <% }) %>
-                                </select>
-                                <p class="text-center text-muted user-select-none border rounded mb-2">
-                                    Hold <i class="bi bi-command"></i> to select multiple labels
-                                </p>
-                                <form id="label-add">
-                                    <div class="input-group">
-                                        <input type="text"
-                                               id="label-add-input"
-                                               class="form-control"
-                                               placeholder="Define a new label..."
-                                               aria-describedby="label-add-button"
-                                               aria-label=""
-                                               required
-                                        />
-                                        <button type="submit" id="label-add-button" class="btn btn-dark">
-                                            Add!
-                                        </button>
-                                    </div>
-                                </form>
-                                <div class="toast-container position-fixed bottom-0 end-0 py-2">
-                                    <div id="label-add-toast"
-                                         class="toast align-items-center text-bg-danger border border-danger"
-                                         style="width: 356px!important;"
-                                         role="alert"
-                                         aria-live="assertive"
-                                         aria-atomic="true"
-                                    >
-                                        <div class="d-flex">
-                                            <div class="toast-body">
-                                                Label already exists!
-                                            </div>
-                                            <button type="button"
-                                                    class="btn-close me-2 m-auto"
-                                                    data-bs-dismiss="toast"
-                                                    aria-label="Close"
-                                            ></button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <pre class="border rounded"><code class="language-<%- language %>"><%- instance.output || " "  %></code></pre>
+                            <label class="mb-2">Expected Output</label>
+                            <pre class="border rounded"><code class="language-<%- language %>"><%- instance.target || " " %></code></pre>
                         </div>
                     </div>
                 </div>
