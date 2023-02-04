@@ -108,9 +108,13 @@
             const labelAddInput = document.getElementById("label-add-input");
             const labelAddToast = document.getElementById("label-add-toast");
 
+            const normalize = (label) => {
+              return label.replaceAll(/\s+/g, " ").toLowerCase().trim();
+            }
+
             labelAddForm.addEventListener("submit", (event) => {
                 event.preventDefault();
-                const label = labelAddInput.value.toLowerCase().trim();
+                const label = normalize(labelAddInput.value);
                 labelAddInput.value = null;
 
                 axios.post("/label", { name: label })
