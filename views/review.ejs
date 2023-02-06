@@ -169,14 +169,14 @@
                 const labelInstanceSelect = document.getElementById("label-instance-select");
                 const labelInstanceInteresting = document.getElementById("label-instance-interesting");
 
-                const normalize = (label) => {
-                    return label.replaceAll(/\s+/g, " ").toLowerCase().trim();
+                const normalize = (name) => {
+                    return name.replaceAll(/\s+/g, " ").toLowerCase().trim();
                 }
 
-                const addOption = (data) => {
+                const addOption = (label) => {
                     const option = document.createElement("option");
-                    option.value = data.id;
-                    option.innerHTML = data.name;
+                    option.value = label.id;
+                    option.innerHTML = label.name;
                     labelInstanceSelect.appendChild(option);
                 }
 
@@ -185,7 +185,7 @@
                     const name = normalize(labelAddInput.value);
                     labelAddInput.value = null;
                     axios.post("/label", { name: name })
-                        .then(({ label }) => addOption(label))
+                        .then(({ data: label }) => addOption(label))
                         .catch(() => new bootstrap.Toast(labelAddToast).show());
                 })
 
