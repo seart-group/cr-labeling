@@ -60,6 +60,11 @@ app.get("/:name/review", async (req, res) => {
     });
 });
 
+app.get("/label", async (_, res) => {
+    const { rows: labels } = await pool.query("SELECT * FROM label ORDER BY id");
+    res.status(200).send(labels);
+});
+
 app.post("/label", (req, res) => {
     pool.query("INSERT INTO label(name) VALUES ($1) RETURNING *", [ req.body.name ])
         .then(({ rows }) => { res.status(201).send(rows[0]); })
