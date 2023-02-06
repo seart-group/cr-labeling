@@ -130,10 +130,13 @@
         <%- include('./partials/scripts/general'); %>
         <%- include('./partials/scripts/hljs'); %>
         <script>
+            const reviewer = <%- JSON.stringify(reviewer) %>;
+            const instance = <%- JSON.stringify(instance) %>;
             const labelSelect = document.getElementById("label-select");
             const labelAddForm = document.getElementById("label-add");
             const labelAddInput = document.getElementById("label-add-input");
             const labelAddToast = document.getElementById("label-add-toast");
+            const labelSelectSubmit = document.getElementById("label-select-submit");
 
             const normalize = (label) => {
                 return label.replaceAll(/\s+/g, " ").toLowerCase().trim();
@@ -162,6 +165,17 @@
             }, 15000);
 
             window.addEventListener("beforeunload", () => clearInterval(labelSelectRefresh), false);
+
+            labelSelectSubmit.addEventListener("click", () => {
+                const selected = [...labelSelect.selectedOptions].map(({ value }) => Number(value));
+                const payload = {
+                    instance_id: instance.id,
+                    reviewer_id: reviewer.id,
+                    is_interesting: false,
+                    label_ids: selected
+                }
+                axios.post("/review", payload).then(() => history.go());
+            });
         </script>
     </body>
 </html>
