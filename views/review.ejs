@@ -90,6 +90,12 @@
                                     </button>
                                 </div>
                             </form>
+                            <div class="form-check mb-2">
+                                <input id="label-select-interesting" class="form-check-input" type="checkbox" value="">
+                                <label for="label-select-interesting" class="form-check-label">
+                                    This instance is interesting
+                                </label>
+                            </div>
                             <div class="d-grid">
                                 <button type="button" id="label-select-submit" class="btn btn-primary btn-lg">
                                     Label Instance!
@@ -132,10 +138,11 @@
         <script>
             const reviewer = <%- JSON.stringify(reviewer) %>;
             const instance = <%- JSON.stringify(instance) %>;
-            const labelSelect = document.getElementById("label-select");
             const labelAddForm = document.getElementById("label-add");
             const labelAddInput = document.getElementById("label-add-input");
             const labelAddToast = document.getElementById("label-add-toast");
+            const labelSelect = document.getElementById("label-select");
+            const labelSelectInteresting = document.getElementById("label-select-interesting");
             const labelSelectSubmit = document.getElementById("label-select-submit");
 
             const normalize = (label) => {
@@ -171,7 +178,7 @@
                 const payload = {
                     instance_id: instance.id,
                     reviewer_id: reviewer.id,
-                    is_interesting: false,
+                    is_interesting: labelSelectInteresting.checked,
                     label_ids: selected
                 }
                 axios.post("/review", payload).then(() => history.go());
