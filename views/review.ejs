@@ -51,6 +51,7 @@
         </main>
         <%- include('./partials/footer'); %>
         <%- include('./partials/scripts'); %>
+        <%- include('./partials/hljs'); %>
         <script>
             const labelSelect = document.getElementById("label-select");
             const labelAddForm = document.getElementById("label-add");
@@ -75,10 +76,6 @@
                     })
                     .catch(() => new bootstrap.Toast(labelAddToast).show())
             })
-        </script>
-        <script>
-            hljs.highlightAll();
-            hljs.initLineNumbersOnLoad({ singleLine: true });
         </script>
     </body>
 </html>
