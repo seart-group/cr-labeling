@@ -40,6 +40,78 @@
                             <pre class="border rounded"><code class="language-<%- language %>"><%- instance.target || " " %></code></pre>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col text-end">
+                            <button type="button"
+                                    class="btn btn-primary"
+                                    data-bs-toggle="offcanvas"
+                                    data-bs-target="#label-offcanvas"
+                                    aria-controls="label-offcanvas"
+                                    autofocus
+                            >
+                                Label
+                            </button>
+                        </div>
+                        <div class="col text-start">
+                            <button type="button" class="btn btn-danger">
+                                Discard
+                            </button>
+                        </div>
+                    </div>
+                    <div class="offcanvas offcanvas-end" tabindex="-1" id="label-offcanvas" aria-labelledby="label-offcanvas-title">
+                        <div class="offcanvas-header">
+                            <h5 class="offcanvas-title" id="label-offcanvas-title">Assign Labels</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                        </div>
+                        <div class="offcanvas-body">
+                            <label for="label-select" class="mb-2">
+                                Select Labels
+                            </label>
+                            <select id="label-select" class="form-select mb-2" size="10" multiple>
+                                <% labels.forEach(label => { %>
+                                    <option value="<%- label.id %>"><%- label.name %></option>
+                                <% }) %>
+                            </select>
+                            <p class="text-center text-muted user-select-none border rounded mb-2">
+                                Hold <i class="bi bi-command"></i> to select multiple labels
+                            </p>
+                            <form id="label-add">
+                                <div class="input-group">
+                                    <input type="text"
+                                           id="label-add-input"
+                                           class="form-control"
+                                           placeholder="Define a new label..."
+                                           aria-describedby="label-add-button"
+                                           aria-label=""
+                                           required
+                                    />
+                                    <button type="submit" id="label-add-button" class="btn btn-dark">
+                                        Add!
+                                    </button>
+                                </div>
+                            </form>
+                            <div class="toast-container position-fixed bottom-0 end-0 p-2">
+                                <div id="label-add-toast"
+                                     class="toast align-items-center text-bg-danger border border-danger"
+                                     role="alert"
+                                     aria-live="assertive"
+                                     aria-atomic="true"
+                                >
+                                    <div class="d-flex">
+                                        <div class="toast-body">
+                                            Label already exists!
+                                        </div>
+                                        <button type="button"
+                                                class="btn-close btn-close-white me-2 m-auto"
+                                                data-bs-dismiss="toast"
+                                                aria-label="Close"
+                                        ></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             <% } else { %>
                 <h1 class="text-center mb-3">
