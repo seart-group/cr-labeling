@@ -60,6 +60,25 @@ app.get("/:name/review", async (req, res) => {
     });
 });
 
+app.post("/review", async (req, res) => {
+    const payload = req.body;
+    const parameters = [ payload.instance_id, payload.reviewer_id, payload.is_interesting ];
+
+    const { rows: [ { id: instance_review_id } ] } = await pool.query(
+        "INSERT INTO instance_review(instance_id, reviewer_id, is_interesting) VALUES ($1, $2, $3) RETURNING id",
+        parameters
+    );
+
+    payload.label_ids.forEach(label_id => {
+        pool.query(
+            "INSERT INTO instance_review_label(label_id, instance_review_id) VALUES ($1, $2)",
+            [ label_id, instance_review_id ]
+        );
+    });
+
+    res.status(200).end();
+});
+
 app.get("/label", async (_, res) => {
     const { rows: labels } = await pool.query("SELECT * FROM label ORDER BY id");
     res.status(200).send(labels);
