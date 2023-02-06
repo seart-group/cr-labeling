@@ -64,17 +64,6 @@
                             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                         </div>
                         <div class="offcanvas-body">
-                            <label for="label-select" class="mb-2">
-                                Select Labels
-                            </label>
-                            <select id="label-select" class="form-select mb-2" size="10" multiple>
-                                <% labels.forEach(label => { %>
-                                    <option value="<%- label.id %>"><%- label.name %></option>
-                                <% }) %>
-                            </select>
-                            <p class="text-center text-muted user-select-none border rounded mb-2">
-                                Hold <i class="bi bi-command"></i> to select multiple labels
-                            </p>
                             <form id="label-add" class="mb-2">
                                 <div class="input-group">
                                     <input type="text"
@@ -90,17 +79,36 @@
                                     </button>
                                 </div>
                             </form>
-                            <div class="form-check mb-2">
-                                <input id="label-select-interesting" class="form-check-input" type="checkbox" value="">
-                                <label for="label-select-interesting" class="form-check-label">
-                                    This instance is interesting
-                                </label>
-                            </div>
-                            <div class="d-grid">
-                                <button type="button" id="label-select-submit" class="btn btn-primary btn-lg">
-                                    Label Instance!
-                                </button>
-                            </div>
+                            <form id="label-instance">
+                                <select id="label-instance-select"
+                                        class="form-select mb-2"
+                                        aria-label="Assign Labels"
+                                        size="10"
+                                        multiple
+                                >
+                                    <% labels.forEach(label => { %>
+                                        <option value="<%- label.id %>"><%- label.name %></option>
+                                    <% }) %>
+                                </select>
+                                <p class="text-center text-muted user-select-none border rounded mb-2">
+                                    Hold <i class="bi bi-command"></i> to select multiple labels
+                                </p>
+                                <div class="form-check mb-2">
+                                    <input id="label-instance-interesting"
+                                           class="form-check-input"
+                                           type="checkbox"
+                                           value=""
+                                    />
+                                    <label for="label-instance-interesting" class="form-check-label">
+                                        This instance is interesting
+                                    </label>
+                                </div>
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-primary btn-lg">
+                                        Label Instance!
+                                    </button>
+                                </div>
+                            </form>
                             <div class="toast-container position-fixed bottom-0 end-0 p-2">
                                 <div id="label-add-toast"
                                      class="toast align-items-center text-bg-danger border border-danger"
@@ -141,9 +149,9 @@
             const labelAddForm = document.getElementById("label-add");
             const labelAddInput = document.getElementById("label-add-input");
             const labelAddToast = document.getElementById("label-add-toast");
-            const labelSelect = document.getElementById("label-select");
-            const labelSelectInteresting = document.getElementById("label-select-interesting");
-            const labelSelectSubmit = document.getElementById("label-select-submit");
+            const labelInstance = document.getElementById("label-instance");
+            const labelInstanceSelect = document.getElementById("label-instance-select");
+            const labelInstanceInteresting = document.getElementById("label-instance-interesting");
 
             const normalize = (label) => {
                 return label.replaceAll(/\s+/g, " ").toLowerCase().trim();
@@ -153,7 +161,7 @@
                 const option = document.createElement("option");
                 option.value = data.id;
                 option.innerHTML = data.name;
-                labelSelect.appendChild(option);
+                labelInstanceSelect.appendChild(option);
             }
 
             labelAddForm.addEventListener("submit", (event) => {
@@ -167,18 +175,19 @@
 
             const labelSelectRefresh = setInterval(async () => {
                 const { data: labels } = await axios.get("/label");
-                const options = labelSelect.options;
+                const options = labelInstanceSelect.options;
                 labels.slice(options.length).forEach(label => addOption(label));
             }, 15000);
 
             window.addEventListener("beforeunload", () => clearInterval(labelSelectRefresh), false);
 
-            labelSelectSubmit.addEventListener("click", () => {
-                const selected = [...labelSelect.selectedOptions].map(({ value }) => Number(value));
+            labelInstance.addEventListener("submit", (event) => {
+                event.preventDefault();
+                const selected = [ ...labelInstanceSelect.selectedOptions ].map(({ value }) => Number(value));
                 const payload = {
                     instance_id: instance.id,
                     reviewer_id: reviewer.id,
-                    is_interesting: labelSelectInteresting.checked,
+                    is_interesting: labelInstanceInteresting.checked,
                     label_ids: selected
                 }
                 axios.post("/review", payload).then(() => history.go());
