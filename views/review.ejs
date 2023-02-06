@@ -17,198 +17,198 @@
             <% } %>
         </header>
         <main>
-            <% if (!!reviewer) { %>
-                <div class="container">
-                    <% if (!!instance) { %>
-                        <div class="row">
-                            <div class="col">
-                                <h1 class="text-center m-3">Task: <%- instance.task %></h1>
-                            </div>
+            <div class="container">
+                <% if (!!reviewer && !!instance) { %>
+                    <div class="row">
+                        <div class="col">
+                            <h1 class="text-center m-3">Task: <%- instance.task %></h1>
                         </div>
-                        <div class="row">
-                            <%
-                                const input_code = instance.input_code || " ";
-                                const input_nl = instance.input_nl || " ";
-                                const language = instance.task === "C&NL2C" ? "java" : "plaintext";
-                                const output = instance.output || " ";
-                                const target = instance.target || " ";
-                            %>
-                            <div class="col overflow-hidden">
-                                <label class="mb-2">Input Source Code</label>
-                                <pre class="border rounded"><code class="language-java"><%- input_code %></code></pre>
-                                <label class="mb-2">Input Comment</label>
-                                <pre class="border rounded"><code class="language-plaintext"><%- input_nl %></code></pre>
-                            </div>
-                            <div class="col-auto vr g-0"></div>
-                            <div class="col overflow-hidden">
-                                <label class="mb-2">Actual Output</label>
-                                <pre class="border rounded"><code class="language-<%- language %>"><%- output %></code></pre>
-                                <label class="mb-2">Expected Output</label>
-                                <pre class="border rounded"><code class="language-<%- language %>"><%- target %></code></pre>
-                            </div>
+                    </div>
+                    <div class="row">
+                        <%
+                            const input_code = instance.input_code || " ";
+                            const input_nl = instance.input_nl || " ";
+                            const language = instance.task === "C&NL2C" ? "java" : "plaintext";
+                            const output = instance.output || " ";
+                            const target = instance.target || " ";
+                        %>
+                        <div class="col overflow-hidden">
+                            <label class="mb-2">Input Source Code</label>
+                            <pre class="border rounded"><code class="language-java"><%- input_code %></code></pre>
+                            <label class="mb-2">Input Comment</label>
+                            <pre class="border rounded"><code class="language-plaintext"><%- input_nl %></code></pre>
                         </div>
-                        <div class="row">
-                            <div class="col text-end">
-                                <button type="button"
-                                        class="btn btn-primary"
-                                        data-bs-toggle="offcanvas"
-                                        data-bs-target="#label-offcanvas"
-                                        aria-controls="label-offcanvas"
-                                        autofocus
+                        <div class="col-auto vr g-0"></div>
+                        <div class="col overflow-hidden">
+                            <label class="mb-2">Actual Output</label>
+                            <pre class="border rounded"><code class="language-<%- language %>"><%- output %></code></pre>
+                            <label class="mb-2">Expected Output</label>
+                            <pre class="border rounded"><code class="language-<%- language %>"><%- target %></code></pre>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col text-end">
+                            <button type="button"
+                                    class="btn btn-primary"
+                                    data-bs-toggle="offcanvas"
+                                    data-bs-target="#label-offcanvas"
+                                    aria-controls="label-offcanvas"
+                                    autofocus
+                            >
+                                Label
+                            </button>
+                        </div>
+                        <div class="col text-start">
+                            <button type="button" class="btn btn-danger">
+                                Discard
+                            </button>
+                        </div>
+                    </div>
+                    <div id="label-offcanvas"
+                         class="offcanvas offcanvas-end"
+                         aria-labelledby="label-offcanvas-title"
+                         tabindex="-1"
+                    >
+                        <div class="offcanvas-header">
+                            <h5 class="offcanvas-title" id="label-offcanvas-title">Assign Labels</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close">
+                            </button>
+                        </div>
+                        <div class="offcanvas-body">
+                            <form id="label-add" class="mb-2">
+                                <div class="input-group">
+                                    <input type="text"
+                                           id="label-add-input"
+                                           class="form-control"
+                                           placeholder="Define a new label..."
+                                           aria-describedby="label-add-button"
+                                           aria-label="New Label"
+                                           required
+                                    />
+                                    <button type="submit" id="label-add-button" class="btn btn-dark">
+                                        Add!
+                                    </button>
+                                </div>
+                            </form>
+                            <form id="label-instance">
+                                <select id="label-instance-select"
+                                        class="form-select mb-2"
+                                        aria-label="Assign Labels"
+                                        size="10"
+                                        multiple
                                 >
-                                    Label
-                                </button>
-                            </div>
-                            <div class="col text-start">
-                                <button type="button" class="btn btn-danger">
-                                    Discard
-                                </button>
-                            </div>
-                        </div>
-                        <div id="label-offcanvas"
-                             class="offcanvas offcanvas-end"
-                             aria-labelledby="label-offcanvas-title"
-                             tabindex="-1"
-                        >
-                            <div class="offcanvas-header">
-                                <h5 class="offcanvas-title" id="label-offcanvas-title">Assign Labels</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close">
-                                </button>
-                            </div>
-                            <div class="offcanvas-body">
-                                <form id="label-add" class="mb-2">
-                                    <div class="input-group">
-                                        <input type="text"
-                                               id="label-add-input"
-                                               class="form-control"
-                                               placeholder="Define a new label..."
-                                               aria-describedby="label-add-button"
-                                               aria-label="New Label"
-                                               required
-                                        />
-                                        <button type="submit" id="label-add-button" class="btn btn-dark">
-                                            Add!
-                                        </button>
-                                    </div>
-                                </form>
-                                <form id="label-instance">
-                                    <select id="label-instance-select"
-                                            class="form-select mb-2"
-                                            aria-label="Assign Labels"
-                                            size="10"
-                                            multiple
-                                    >
-                                        <% labels.forEach(label => { %>
-                                            <option value="<%- label.id %>"><%- label.name %></option>
-                                        <% }) %>
-                                    </select>
-                                    <p class="text-center text-muted user-select-none border rounded mb-2">
-                                        Hold <i class="bi bi-command"></i> to select multiple labels
-                                    </p>
-                                    <div class="form-check mb-2">
-                                        <input id="label-instance-interesting"
-                                               class="form-check-input"
-                                               type="checkbox"
-                                               value=""
-                                        />
-                                        <label for="label-instance-interesting" class="form-check-label">
-                                            This instance is interesting
-                                        </label>
-                                    </div>
-                                    <div class="d-grid">
-                                        <button type="submit" class="btn btn-primary btn-lg">
-                                            Label Instance!
-                                        </button>
-                                    </div>
-                                </form>
-                                <div class="toast-container position-fixed bottom-0 end-0 p-2">
-                                    <div id="label-add-toast"
-                                         class="toast align-items-center text-bg-danger border border-danger"
-                                         role="alert"
-                                         aria-live="assertive"
-                                         aria-atomic="true"
-                                    >
-                                        <div class="d-flex">
-                                            <div class="toast-body">
-                                                Label already exists!
-                                            </div>
-                                            <button type="button"
-                                                    class="btn-close btn-close-white me-2 m-auto"
-                                                    data-bs-dismiss="toast"
-                                                    aria-label="Close"
-                                            ></button>
+                                    <% labels.forEach(label => { %>
+                                        <option value="<%- label.id %>"><%- label.name %></option>
+                                    <% }) %>
+                                </select>
+                                <p class="text-center text-muted user-select-none border rounded mb-2">
+                                    Hold <i class="bi bi-command"></i> to select multiple labels
+                                </p>
+                                <div class="form-check mb-2">
+                                    <input id="label-instance-interesting"
+                                           class="form-check-input"
+                                           type="checkbox"
+                                           value=""
+                                    />
+                                    <label for="label-instance-interesting" class="form-check-label">
+                                        This instance is interesting
+                                    </label>
+                                </div>
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-primary btn-lg">
+                                        Label Instance!
+                                    </button>
+                                </div>
+                            </form>
+                            <div class="toast-container position-fixed bottom-0 end-0 p-2">
+                                <div id="label-add-toast"
+                                     class="toast align-items-center text-bg-danger border border-danger"
+                                     role="alert"
+                                     aria-live="assertive"
+                                     aria-atomic="true"
+                                >
+                                    <div class="d-flex">
+                                        <div class="toast-body">
+                                            Label already exists!
                                         </div>
+                                        <button type="button"
+                                                class="btn-close btn-close-white me-2 m-auto"
+                                                data-bs-dismiss="toast"
+                                                aria-label="Close"
+                                        ></button>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    <% } else { %>
-                            <h1 class="text-center mb-3">
-                                <i class="bi bi-emoji-smile-fill"></i>
-                                Review Queue Cleared!
-                            </h1>
-                    <% } %>
-                </div>
-            <% } else { %>
-                <h1 class="text-center mb-3">
-                    <i class="bi bi-emoji-dizzy-fill"></i>
-                    You Must Log In First!
-                </h1>
-                <%- include('./partials/home-button'); %>
-            <% } %>
+                    </div>
+                <% } else if (!!reviewer && !instance) { %>
+                    <h1 class="text-center mb-3">
+                        <i class="bi bi-emoji-smile-fill"></i>
+                        Review Queue Cleared!
+                    </h1>
+                <% } else { %>
+                    <h1 class="text-center mb-3">
+                        <i class="bi bi-emoji-dizzy-fill"></i>
+                        You Must Log In First!
+                    </h1>
+                    <%- include('./partials/home-button'); %>
+                <% } %>
+            </div>
         </main>
         <%- include('./partials/footer'); %>
         <%- include('./partials/scripts/general'); %>
         <%- include('./partials/scripts/hljs'); %>
-        <script>
-            const reviewer = <%- JSON.stringify(reviewer) %>;
-            const instance = <%- JSON.stringify(instance) %>;
-            const labelAddForm = document.getElementById("label-add");
-            const labelAddInput = document.getElementById("label-add-input");
-            const labelAddToast = document.getElementById("label-add-toast");
-            const labelInstance = document.getElementById("label-instance");
-            const labelInstanceSelect = document.getElementById("label-instance-select");
-            const labelInstanceInteresting = document.getElementById("label-instance-interesting");
+        <% if (!!reviewer && !!instance) { %>
+            <script>
+                const reviewer = <%- JSON.stringify(reviewer) %>;
+                const instance = <%- JSON.stringify(instance) %>;
+                const labelAddForm = document.getElementById("label-add");
+                const labelAddInput = document.getElementById("label-add-input");
+                const labelAddToast = document.getElementById("label-add-toast");
+                const labelInstance = document.getElementById("label-instance");
+                const labelInstanceSelect = document.getElementById("label-instance-select");
+                const labelInstanceInteresting = document.getElementById("label-instance-interesting");
 
-            const normalize = (label) => {
-                return label.replaceAll(/\s+/g, " ").toLowerCase().trim();
-            }
-
-            const addOption = (data) => {
-                const option = document.createElement("option");
-                option.value = data.id;
-                option.innerHTML = data.name;
-                labelInstanceSelect.appendChild(option);
-            }
-
-            labelAddForm.addEventListener("submit", (event) => {
-                event.preventDefault();
-                const name = normalize(labelAddInput.value);
-                labelAddInput.value = null;
-                axios.post("/label", { name: name })
-                    .then(({ label }) => addOption(label))
-                    .catch(() => new bootstrap.Toast(labelAddToast).show());
-            })
-
-            const labelSelectRefresh = setInterval(async () => {
-                const { data: labels } = await axios.get("/label");
-                const options = labelInstanceSelect.options;
-                labels.slice(options.length).forEach(label => addOption(label));
-            }, 15000);
-
-            window.addEventListener("beforeunload", () => clearInterval(labelSelectRefresh), false);
-
-            labelInstance.addEventListener("submit", (event) => {
-                event.preventDefault();
-                const selected = [ ...labelInstanceSelect.selectedOptions ].map(({ value }) => Number(value));
-                const payload = {
-                    instance_id: instance.id,
-                    reviewer_id: reviewer.id,
-                    is_interesting: labelInstanceInteresting.checked,
-                    label_ids: selected
+                const normalize = (label) => {
+                    return label.replaceAll(/\s+/g, " ").toLowerCase().trim();
                 }
-                axios.post("/review", payload).then(() => history.go());
-            });
-        </script>
+
+                const addOption = (data) => {
+                    const option = document.createElement("option");
+                    option.value = data.id;
+                    option.innerHTML = data.name;
+                    labelInstanceSelect.appendChild(option);
+                }
+
+                labelAddForm.addEventListener("submit", (event) => {
+                    event.preventDefault();
+                    const name = normalize(labelAddInput.value);
+                    labelAddInput.value = null;
+                    axios.post("/label", { name: name })
+                        .then(({ label }) => addOption(label))
+                        .catch(() => new bootstrap.Toast(labelAddToast).show());
+                })
+
+                const labelSelectRefresh = setInterval(async () => {
+                    const { data: labels } = await axios.get("/label");
+                    const options = labelInstanceSelect.options;
+                    labels.slice(options.length).forEach(label => addOption(label));
+                }, 15000);
+
+                window.addEventListener("beforeunload", () => clearInterval(labelSelectRefresh), false);
+
+                labelInstance.addEventListener("submit", (event) => {
+                    event.preventDefault();
+                    const selected = [ ...labelInstanceSelect.selectedOptions ].map(({ value }) => Number(value));
+                    const payload = {
+                        instance_id: instance.id,
+                        reviewer_id: reviewer.id,
+                        is_interesting: labelInstanceInteresting.checked,
+                        label_ids: selected
+                    }
+                    axios.post("/review", payload).then(() => history.go());
+                });
+            </script>
+        <% } %>
     </body>
 </html>
