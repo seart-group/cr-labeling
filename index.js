@@ -57,7 +57,7 @@ app.get("/:name/review", async (req, res) => {
     );
     const { rows: [ instance ] } = await pool.query(
         "SELECT * FROM next_instance($1)",
-        [ reviewer?.id || 0 ]
+        [ reviewer?.id || null ]
     );
     res.render("review", {
         reviewer: reviewer,
