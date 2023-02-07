@@ -9,5 +9,3 @@ CREATE DATABASE cr_labeling WITH
 OWNER = cr_labeling_admin
 ENCODING = 'UTF8'
 CONNECTION LIMIT = -1;
-
-CREATE EXTENSION tsm_system_rows;

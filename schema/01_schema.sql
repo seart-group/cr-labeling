@@ -25,8 +25,7 @@ CREATE TABLE "instance" (
   "input_code" text,
   "input_nl" text,
   "output" text,
-  "target" text,
-  "discarded" boolean DEFAULT false
+  "target" text
 );
 
 CREATE TABLE "reviewer" (
@@ -47,13 +46,23 @@ CREATE TABLE "instance_review" (
   "reviewed_at" timestamp DEFAULT (now())
 );
 
-CREATE TABLE "instance_review_label" (
-  "label_id" integer,
-  "instance_review_id" integer,
-  PRIMARY KEY ("label_id", "instance_review_id")
+CREATE TABLE "instance_discard" (
+  "instance_id" integer,
+  "reviewer_id" integer,
+  PRIMARY KEY ("instance_id", "reviewer_id")
 );
+
+CREATE TABLE "instance_review_label" (
+  "instance_review_id" integer,
+  "label_id" integer,
+  PRIMARY KEY ("instance_review_id", "label_id")
+);
+
+CREATE UNIQUE INDEX ON "instance_review" ("instance_id", "reviewer_id");
 
 ALTER TABLE "instance_review" ADD FOREIGN KEY ("instance_id") REFERENCES "instance" ("id");
 ALTER TABLE "instance_review" ADD FOREIGN KEY ("reviewer_id") REFERENCES "reviewer" ("id");
-ALTER TABLE "instance_review_label" ADD FOREIGN KEY ("label_id") REFERENCES "label" ("id");
+ALTER TABLE "instance_discard" ADD FOREIGN KEY ("instance_id") REFERENCES "instance" ("id");
+ALTER TABLE "instance_discard" ADD FOREIGN KEY ("reviewer_id") REFERENCES "reviewer" ("id");
 ALTER TABLE "instance_review_label" ADD FOREIGN KEY ("instance_review_id") REFERENCES "instance_review" ("id");
+ALTER TABLE "instance_review_label" ADD FOREIGN KEY ("label_id") REFERENCES "label" ("id");
