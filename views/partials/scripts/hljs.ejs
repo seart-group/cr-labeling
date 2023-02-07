@@ -5,6 +5,9 @@
     document.addEventListener("DOMContentLoaded", () => {
         document.querySelectorAll("pre code").forEach((element) => {
             hljs.highlightElement(element);
+            element.innerHTML = element.innerHTML
+                .replaceAll(/&lt;START&gt;/gm,"<mark>")
+                .replaceAll(/&lt;END&gt;/gm,"</mark>");
             hljs.lineNumbersBlock(element, { singleLine: true });
         });
     });
