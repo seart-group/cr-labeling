@@ -178,7 +178,7 @@
                     option.value = label.id;
                     option.innerHTML = label.name;
                     labelInstanceSelect.appendChild(option);
-                }
+                };
 
                 labelAddForm.addEventListener("submit", (event) => {
                     event.preventDefault();
@@ -187,7 +187,7 @@
                     axios.post("/label", { name: name })
                         .then(({ data: label }) => addOption(label))
                         .catch(() => new bootstrap.Toast(labelAddToast).show());
-                })
+                });
 
                 const labelSelectRefresh = setInterval(async () => {
                     const { data: labels } = await axios.get("/label");
@@ -205,7 +205,7 @@
                         reviewer_id: reviewer.id,
                         is_interesting: labelInstanceInteresting.checked,
                         label_ids: selected
-                    }
+                    };
                     axios.post("/review", payload).then(() => history.go());
                 });
             </script>
