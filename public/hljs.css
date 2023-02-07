@@ -2,11 +2,16 @@ pre code.hljs {
     height: 250px!important;
 }
 
+pre code.hljs mark {
+    padding: 0.2rem;
+    background-color: yellow;
+}
+
 .hljs-ln-numbers {
     user-select: none;
     text-align: center;
-    color: #ccc;
-    border-right: 1px solid #CCC;
+    color: #cccccc;
+    border-right: 1px solid #cccccc;
     vertical-align: top;
     padding-right: 5px!important;
 }
