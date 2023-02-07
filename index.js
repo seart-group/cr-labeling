@@ -50,12 +50,18 @@ app.post("/login", async (req, res) => {
 });
 
 app.get("/:name/review", async (req, res) => {
-    const { rows: reviewers } = await pool.query("SELECT * FROM reviewer WHERE name = $1", [ req.params.name ]);
     const { rows: labels } = await pool.query("SELECT * FROM label ORDER BY id");
-    const { rows: instances } = await pool.query("SELECT * FROM instance TABLESAMPLE SYSTEM_ROWS(1)");
+    const { rows: [ reviewer ] } = await pool.query(
+        "SELECT * FROM reviewer WHERE name = $1 LIMIT 1",
+        [ req.params.name ]
+    );
+    const { rows: [ instance ] } = await pool.query(
+        "SELECT * FROM next_instance($1)",
+        [ reviewer?.id || 0 ]
+    );
     res.render("review", {
-        reviewer: reviewers[0],
-        instance: instances[0],
+        reviewer: reviewer,
+        instance: instance,
         labels: labels
     });
 });
