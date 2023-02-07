@@ -59,7 +59,10 @@
                             </button>
                         </div>
                         <div class="col text-start">
-                            <button type="button" class="btn btn-danger">
+                            <button id="discard-instance"
+                                    type="button"
+                                    class="btn btn-danger"
+                            >
                                 Discard
                             </button>
                         </div>
@@ -169,6 +172,7 @@
                 const labelInstance = document.getElementById("label-instance");
                 const labelInstanceSelect = document.getElementById("label-instance-select");
                 const labelInstanceInteresting = document.getElementById("label-instance-interesting");
+                const discardInstance = document.getElementById("discard-instance");
 
                 const normalize = (name) => {
                     return name.replaceAll(/\s+/g, " ").toLowerCase().trim();
@@ -208,6 +212,14 @@
                         label_ids: selected
                     };
                     axios.post("/instance/submit", payload).then(() => history.go());
+                });
+
+                discardInstance.addEventListener("click", () => {
+                    const payload = {
+                        instance_id: instance.id,
+                        reviewer_id: reviewer.id
+                    };
+                    axios.post("/instance/discard", payload).then(() => history.go());
                 });
             </script>
         <% } %>

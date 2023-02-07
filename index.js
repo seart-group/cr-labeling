@@ -85,6 +85,13 @@ app.post("/instance/submit", async (req, res) => {
     res.status(200).end();
 });
 
+app.post("/instance/discard", (req, res) => {
+    const payload = req.body;
+    const parameters = [ payload.instance_id, payload.reviewer_id ];
+    pool.query("INSERT INTO instance_discard(instance_id, reviewer_id) VALUES ($1, $2)", parameters)
+        .then(() => res.status(200).end());
+});
+
 app.get("/label", async (_, res) => {
     const { rows: labels } = await pool.query("SELECT * FROM label ORDER BY id");
     res.status(200).send(labels);
