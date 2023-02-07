@@ -207,7 +207,7 @@
                         is_interesting: labelInstanceInteresting.checked,
                         label_ids: selected
                     };
-                    axios.post("/review", payload).then(() => history.go());
+                    axios.post("/instance/submit", payload).then(() => history.go());
                 });
             </script>
         <% } %>

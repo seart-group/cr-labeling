@@ -66,7 +66,7 @@ app.get("/:name/review", async (req, res) => {
     });
 });
 
-app.post("/review", async (req, res) => {
+app.post("/instance/submit", async (req, res) => {
     const payload = req.body;
     const parameters = [ payload.instance_id, payload.reviewer_id, payload.is_interesting ];
 
