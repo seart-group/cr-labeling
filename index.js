@@ -1,5 +1,6 @@
 const { Pool } = require("pg");
 const { PostgresError: PGError } = require("pg-error-enum");
+const { Server: IO } = require("socket.io");
 
 require("dotenv").config();
 const path = require("path");
@@ -117,8 +118,16 @@ app.get("*", (_, res) => {
     });
 });
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
     if (nodeEnv === "development") {
         console.log(`App listening on: http://localhost:${port}`);
     }
+});
+
+const io = new IO(server);
+
+io.on("connection", (socket) => {
+    socket.on("label_added", () => {
+        socket.broadcast.emit("label_refresh");
+    });
 });
