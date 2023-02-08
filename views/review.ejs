@@ -124,25 +124,16 @@
                                     </button>
                                 </div>
                             </form>
-                            <div class="toast-container position-fixed bottom-0 end-0 p-2">
-                                <div id="label-add-toast"
-                                     class="toast align-items-center text-bg-danger border border-danger"
-                                     role="alert"
-                                     aria-live="assertive"
-                                     aria-atomic="true"
-                                >
-                                    <div class="d-flex">
-                                        <div class="toast-body">
-                                            Label already exists!
-                                        </div>
-                                        <button type="button"
-                                                class="btn-close btn-close-white me-2 m-auto"
-                                                data-bs-dismiss="toast"
-                                                aria-label="Close"
-                                        ></button>
-                                    </div>
-                                </div>
-                            </div>
+                            <%-
+                                include(
+                                    './partials/toast',
+                                    {
+                                        id: "label-add-toast",
+                                        body: "Label already exists!",
+                                        variant: "danger"
+                                    }
+                                )
+                            %>
                         </div>
                     </div>
                 <% } else if (!!reviewer && !instance) { %>
