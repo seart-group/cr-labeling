@@ -251,3 +251,5 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
+### Deployment
+deployment/pgdata/
