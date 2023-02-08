@@ -1,25 +1,30 @@
-CREATE OR REPLACE VIEW "instance_review_bucket" AS
-SELECT
-    instance.task AS task,
-    instance.work AS work,
-    instance.category AS category,
-    COUNT(instance.id) AS count
-FROM instance
-INNER JOIN instance_review review ON instance.id = review.instance_id
-GROUP BY instance.task, instance.work, instance.category
-ORDER BY instance.task, instance.work, instance.category;
-
-CREATE OR REPLACE VIEW "instance_review_bucket_filled" AS
-SELECT bucket.task, bucket.work, bucket.category
-FROM instance_review_bucket AS bucket
-WHERE bucket.count > 166;
-
 CREATE OR REPLACE VIEW "instance_review_candidate" AS
 SELECT instance.* FROM instance
 LEFT OUTER JOIN instance_review AS review ON instance.id = review.instance_id
 GROUP BY instance.id
 HAVING COUNT(review.id) < 2
 ORDER BY COUNT(review.id) DESC, RANDOM();
+
+CREATE OR REPLACE VIEW "instance_review_finished" AS
+SELECT instance.* from instance
+LEFT OUTER JOIN instance_review AS review ON instance.id = review.instance_id
+GROUP BY instance.id
+HAVING COUNT(review.id) >= 2;
+
+CREATE OR REPLACE VIEW "instance_review_bucket" AS
+SELECT
+    finished.task AS task,
+    finished.work AS work,
+    finished.category AS category,
+    COUNT(finished.id) AS count
+FROM instance_review_finished AS finished
+GROUP BY finished.task, finished.work, finished.category
+ORDER BY finished.task, finished.work, finished.category;
+
+CREATE OR REPLACE VIEW "instance_review_bucket_filled" AS
+SELECT bucket.task, bucket.work, bucket.category
+FROM instance_review_bucket AS bucket
+WHERE bucket.count > 166;
 
 CREATE OR REPLACE FUNCTION
     "next_instance"(reviewer_id integer)
