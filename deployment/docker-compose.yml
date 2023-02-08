@@ -1,0 +1,53 @@
+version: "3.9"
+
+services:
+
+  cr-labeling-database:
+    container_name: cr-labeling-database
+    image: postgres:14.6-alpine
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+      - ../schema/01_schema.sql:/docker-entrypoint-initdb.d/01_schema.sql
+      - ../schema/02_views.sql:/docker-entrypoint-initdb.d/02_views.sql
+    networks: [ default ]
+    environment:
+      TZ: UTC
+      POSTGRES_DB: ${DATABASE_NAME}
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASS}
+    deploy:
+      restart_policy:
+        condition: any
+    healthcheck:
+      test: pg_isready -U ${DATABASE_USER} -d ${DATABASE_NAME}
+      start_period: 15s
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  cr-labeling-server:
+    container_name: cr-labeling-server
+    image: cr-labeling/server:latest
+    build:
+      context: ../
+      dockerfile: deployment/server/Dockerfile
+    networks: [ default ]
+    environment:
+      DATABASE_HOST: cr-labeling-database
+      DATABASE_PORT: ${DATABASE_PORT}
+      DATABASE_NAME: ${DATABASE_NAME}
+      DATABASE_USER: ${DATABASE_USER}
+      DATABASE_PASS: ${DATABASE_PASS}
+    depends_on:
+      cr-labeling-database:
+        condition: service_healthy
+    deploy:
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+    ports:
+      - "7654:3000"
+
+networks:
+  default:
+    name: cr-labeling-network
