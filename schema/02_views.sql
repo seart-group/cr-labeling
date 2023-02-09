@@ -26,6 +26,11 @@ SELECT bucket.task, bucket.work, bucket.category
 FROM instance_review_bucket AS bucket
 WHERE bucket.count > 166;
 
+CREATE OR REPLACE VIEW "instance_review_progress" AS
+SELECT reviewer.*, count(review.reviewer_id) AS progress FROM reviewer
+LEFT OUTER JOIN instance_review review on reviewer.id = review.reviewer_id
+GROUP BY reviewer.id;
+
 CREATE OR REPLACE FUNCTION
     "next_instance"(reviewer_id integer)
     RETURNS SETOF instance
