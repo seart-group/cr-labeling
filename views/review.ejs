@@ -8,7 +8,41 @@
                 <% if (!!reviewer && !!instance) { %>
                     <div class="row">
                         <div class="col">
-                            <h1 class="text-center m-3">Task: <%- instance.task %></h1>
+                            <h1 class="text-start mb-3">
+                                <%- instance.task %>
+                            </h1>
+                         </div>
+                        <div class="col">
+                            <h1 class="text-end mb-3">
+                                <%
+                                    switch (instance.category) {
+                                        case "C":
+                                %>
+                                    <i class="bi bi-check-square-fill"
+                                       style="color: darkgreen;"
+                                       title="Correct Prediction"
+                                    ></i>
+                                <%
+                                        break;
+                                        case "W":
+                                %>
+                                    <i class="bi bi-x-square-fill"
+                                       style="color: darkred;"
+                                       title="Wrong Prediction"
+                                    ></i>
+                                <%
+                                        break;
+                                        default:
+                                %>
+                                    <i class="bi bi-question-square-fill"
+                                       style="color: darkgoldenrod;"
+                                       title="Unknown..."
+                                    ></i>
+                                <%
+                                        break;
+                                    }
+                                %>
+                            </h1>
                         </div>
                     </div>
                     <div class="row">
