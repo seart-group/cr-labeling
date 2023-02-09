@@ -197,10 +197,17 @@
                 }
 
                 const addOption = (label) => {
-                    const option = document.createElement("option");
-                    option.value = label.id;
-                    option.innerHTML = label.name;
-                    labelInstanceSelect.appendChild(option);
+                    const created_option = new Option(label.name, label.id);
+                    const existing_options = labelInstanceSelect.options;
+                    for (let idx = 0; idx < existing_options.length; idx++) {
+                        const current_option = existing_options.item(idx);
+                        if (created_option.innerHTML < current_option.innerHTML) {
+                            labelInstanceSelect.insertBefore(created_option, current_option);
+                            break;
+                        } else if (idx === existing_options.length - 1) {
+                            labelInstanceSelect.appendChild(created_option);
+                        }
+                    }
                 };
 
                 labelAddForm.addEventListener("submit", (event) => {
