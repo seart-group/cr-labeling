@@ -177,8 +177,8 @@
             <script src="/socket.io/socket.io.js"></script>
             <script>
                 const socket = io();
-                const reviewer = <%- JSON.stringify(reviewer) %>;
-                const instance = <%- JSON.stringify(instance) %>;
+                const reviewer_id = Number(`<%- reviewer.id %>`);
+                const instance_id = Number(`<%- instance.id %>`);
                 const labelAddForm = document.getElementById("label-add");
                 const labelAddInput = document.getElementById("label-add-input");
                 const labelAddToast = document.getElementById("label-add-toast");
@@ -226,8 +226,8 @@
                     event.preventDefault();
                     const selected = [ ...labelInstanceSelect.selectedOptions ].map(({ value }) => Number(value));
                     const payload = {
-                        instance_id: instance.id,
-                        reviewer_id: reviewer.id,
+                        instance_id: instance_id,
+                        reviewer_id: reviewer_id,
                         is_interesting: labelInstanceInteresting.checked,
                         label_ids: selected
                     };
@@ -236,8 +236,8 @@
 
                 discardInstance.addEventListener("click", () => {
                     const payload = {
-                        instance_id: instance.id,
-                        reviewer_id: reviewer.id
+                        instance_id: instance_id,
+                        reviewer_id: reviewer_id
                     };
                     axios.post("/instance/discard", payload).then(refresh);
                 });
