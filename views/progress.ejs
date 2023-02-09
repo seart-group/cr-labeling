@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('./partials/head'); %>
+    <body class="vh-100 vw-100 d-flex flex-column justify-content-between">
+        <%- include('./partials/header'); %>
+        <main>
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-6 col-md-8 col-12">
+                        <table class="table table-light table-striped table-bordered caption-top">
+                            <caption>Review Progress For Each Reviewer</caption>
+                            <thead>
+                                <tr>
+                                    <th scope="col">Reviewer</th>
+                                    <th class="text-end" scope="col">Instances Reviewed</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% reviewers.forEach((reviewer) => {%>
+                                    <tr>
+                                        <th scope="row"><%- reviewer.name %></th>
+                                        <td class="text-end"><%- reviewer.progress %></td>
+                                    </tr>
+                                <%}); %>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-12">
+                        <%- include('./partials/home-button'); %>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <%- include('./partials/footer'); %>
+        <%- include('./partials/scripts/general'); %>
+    </body>
+</html>

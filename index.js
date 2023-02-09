@@ -67,6 +67,11 @@ app.get("/:name/queue", async (req, res) => {
     });
 });
 
+app.get("/progress", async (req, res) => {
+    const { rows: reviewers } = await pool.query("SELECT * FROM instance_review_progress");
+    res.render("progress", { reviewers: reviewers });
+});
+
 app.post("/instance/submit", async (req, res) => {
     const payload = req.body;
     const parameters = [ payload.instance_id, payload.reviewer_id, payload.is_interesting ];
