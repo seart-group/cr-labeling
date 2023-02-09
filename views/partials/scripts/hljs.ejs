@@ -8,7 +8,9 @@
             element.innerHTML = element.innerHTML
                 .replaceAll(/&lt;START&gt;/gm,"<mark>")
                 .replaceAll(/&lt;END&gt;/gm,"</mark>");
-            hljs.lineNumbersBlock(element, { singleLine: true });
+            if (!element.classList.contains("language-plaintext")) {
+                hljs.lineNumbersBlock(element, { singleLine: true });
+            }
         });
     });
 </script>
