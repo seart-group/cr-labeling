@@ -210,18 +210,14 @@
                     axios.post("/label", { name: name })
                         .then(({ data: label }) => {
                             addOption(label);
-                            socket.emit("label_added");
+                            socket.emit("label_added", label);
                         })
                         .catch(() => {
                             new bootstrap.Toast(labelAddToast).show();
                         });
                 });
 
-                socket.on("label_refresh", async () => {
-                    const { data: labels } = await axios.get("/label");
-                    const options = labelInstanceSelect.options;
-                    labels.slice(options.length).forEach((label) => addOption(label));
-                });
+                socket.on("label_append", (label) => addOption(label));
 
                 labelInstance.addEventListener("submit", (event) => {
                     event.preventDefault();

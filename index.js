@@ -127,7 +127,7 @@ const server = app.listen(port, () => {
 const io = new IO(server);
 
 io.on("connection", (socket) => {
-    socket.on("label_added", () => {
-        socket.broadcast.emit("label_refresh");
+    socket.on("label_added", (label) => {
+        socket.broadcast.emit("label_append", label);
     });
 });
