@@ -32,25 +32,51 @@
                         </div>
                     </div>
                     <div class="row">
-                        <%
-                            const input_code = instance.input_code || " ";
-                            const input_nl = instance.input_nl || " ";
-                            const language = instance.task === "C&NL2C" ? "java" : "plaintext";
-                            const output = instance.output || " ";
-                            const target = instance.target || " ";
-                        %>
+                        <% const language = instance.task === "C&NL2C" ? "java" : "plaintext"; %>
                         <div class="col overflow-hidden">
                             <label class="mb-2">Input Source Code</label>
-                            <pre class="border rounded"><code class="language-java"><%= input_code %></code></pre>
+                            <%-
+                                include(
+                                    './partials/instance/code-display',
+                                    {
+                                        language: "java",
+                                        input: instance.input_code
+                                    }
+                                );
+                            %>
                             <label class="mb-2">Input Comment</label>
-                            <pre class="border rounded"><code class="language-plaintext"><%= input_nl %></code></pre>
+                            <%-
+                                include(
+                                    './partials/instance/code-display',
+                                    {
+                                        language: "plaintext",
+                                        input: instance.input_nl
+                                    }
+                                );
+                            %>
                         </div>
                         <div class="col-auto vr g-0"></div>
                         <div class="col overflow-hidden">
                             <label class="mb-2">Actual Output</label>
-                            <pre class="border rounded"><code class="language-<%- language %>"><%= output %></code></pre>
+                            <%-
+                                include(
+                                    './partials/instance/code-display',
+                                    {
+                                        language: language,
+                                        input: instance.output
+                                    }
+                                );
+                            %>
                             <label class="mb-2">Expected Output</label>
-                            <pre class="border rounded"><code class="language-<%- language %>"><%= target %></code></pre>
+                            <%-
+                                include(
+                                    './partials/instance/code-display',
+                                    {
+                                        language: language,
+                                        input: instance.target
+                                    }
+                                );
+                            %>
                         </div>
                     </div>
                     <div class="row">

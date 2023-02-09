@@ -1,0 +1,2 @@
+<% const wrap = (language === "plaintext") ? "text-wrap" : "text-nowrap"; %>
+<pre class="border rounded"><code class="language-<%- language %>" style="white-space: <%- (language === "plaintext") ? "normal" : "pre" %>;"><%= input || " " %></code></pre>
