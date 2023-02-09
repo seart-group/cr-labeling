@@ -51,7 +51,7 @@ app.post("/login", async (req, res) => {
 });
 
 app.get("/:name/review", async (req, res) => {
-    const { rows: labels } = await pool.query("SELECT * FROM label ORDER BY id");
+    const { rows: labels } = await pool.query("SELECT * FROM label ORDER BY name");
     const { rows: [ reviewer ] } = await pool.query(
         "SELECT * FROM reviewer WHERE name = $1 LIMIT 1",
         [ req.params.name ]
@@ -94,7 +94,7 @@ app.post("/instance/discard", (req, res) => {
 });
 
 app.get("/label", async (_, res) => {
-    const { rows: labels } = await pool.query("SELECT * FROM label ORDER BY id");
+    const { rows: labels } = await pool.query("SELECT * FROM label ORDER BY name");
     res.status(200).send(labels);
 });
 
