@@ -18,19 +18,24 @@
                             <div class="input-group-text">
                                 <i class="bi bi-person-fill"></i>
                             </div>
-                            <input type="text"
-                                   id="reviewer-name"
-                                   name="name"
-                                   class="form-control"
-                                   placeholder="reviewer"
-                                   autocomplete="username"
-                                   autofocus
-                                   required
-                            />
+                            <select name="id"
+                                    class="form-select"
+                                    aria-label="Select Reviewer"
+                                    autofocus
+                                    required
+                            >
+                                <option value="" disabled selected>Select Reviewer...</option>
+                                <% for (let idx = 0; idx < reviewers.length; idx++) { %>
+                                    <% const reviewer = reviewers[idx]; %>
+                                    <option value="<%- reviewer.id %>">
+                                        <%- reviewer.name %>
+                                    </option>
+                                <% } %>
+                            </select>
                         </div>
                     </div>
                     <div class="col-12">
-                        <button type="submit" class="btn btn-dark">Go!</button>
+                        <button type="submit" class="btn btn-dark">Start!</button>
                     </div>
                 </form>
             </div>

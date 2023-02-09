@@ -31,23 +31,23 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => {
-    res.redirect(req.baseUrl + "/login");
+    res.redirect(`${req.baseUrl}/login`);
 });
 
-app.get("/login", (_, res) => {
-    res.render("login");
+app.get("/login", async (_, res) => {
+    const { rows: reviewers } = await pool.query("SELECT * FROM reviewer");
+    res.render("login", { reviewers: reviewers });
 });
 
 app.post("/login", async (req, res) => {
-    const name = req.body.name;
-    let target = `${name}/review`;
-    try {
-        await pool.query("INSERT INTO reviewer(name) VALUES ($1) RETURNING *", [ name ]);
-    } catch ({ code }) {
-        if (code !== PGError.UNIQUE_VIOLATION) target = "error";
-    } finally {
-        res.redirect(`${req.baseUrl}/${target}`);
-    }
+    const { rows: [ reviewer ] } = await pool.query(
+        "SELECT * FROM reviewer WHERE id = $1 LIMIT 1",
+        [ req.body.id ]
+    );
+    const target = (reviewer)
+        ? `${req.baseUrl}/${reviewer.name}/review`
+        : `${req.baseUrl}/login`;
+    res.redirect(target);
 });
 
 app.get("/:name/review", async (req, res) => {
