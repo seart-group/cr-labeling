@@ -189,8 +189,12 @@
                 const socketDisconnectToast = document.getElementById("socket-disconnect-toast");
                 const socketReconnectToast = document.getElementById("socket-reconnect-toast");
 
-                socket.on("disconnect", () => new bootstrap.Toast(socketDisconnectToast).show());
-                socket.io.on("reconnect", () => new bootstrap.Toast(socketReconnectToast).show());
+                const toast = (element) => {
+                    new bootstrap.Toast(element).show();
+                };
+
+                socket.on("disconnect", () => toast(socketDisconnectToast));
+                socket.io.on("reconnect", () => toast(socketReconnectToast));
 
                 const normalize = (name) => {
                     return name.replaceAll(/\s+/g, " ").toLowerCase().trim();
@@ -219,9 +223,7 @@
                             addOption(label);
                             socket.emit("label_added", label);
                         })
-                        .catch(() => {
-                            new bootstrap.Toast(labelAddToast).show();
-                        });
+                        .catch(() => toast(labelAddToast));
                 });
 
                 socket.on("label_append", (label) => addOption(label));
