@@ -189,6 +189,10 @@
                 const socketDisconnectToast = document.getElementById("socket-disconnect-toast");
                 const socketReconnectToast = document.getElementById("socket-reconnect-toast");
 
+                const refresh = () => {
+                    history.go();
+                };
+
                 const toast = (element) => {
                     new bootstrap.Toast(element).show();
                 };
@@ -232,7 +236,7 @@
                         is_interesting: labelInstanceInteresting.checked,
                         label_ids: selected
                     };
-                    axios.post("/instance/submit", payload).then(() => history.go());
+                    axios.post("/instance/submit", payload).then(refresh);
                 });
 
                 discardInstance.addEventListener("click", () => {
@@ -240,7 +244,7 @@
                         instance_id: instance.id,
                         reviewer_id: reviewer.id
                     };
-                    axios.post("/instance/discard", payload).then(() => history.go());
+                    axios.post("/instance/discard", payload).then(refresh);
                 });
 
                 socket.on("label_append", (label) => addOption(label));
