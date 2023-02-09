@@ -53,7 +53,7 @@ app.post("/login", async (req, res) => {
 app.get("/:name/review", async (req, res) => {
     const { rows: labels } = await pool.query("SELECT * FROM label ORDER BY name");
     const { rows: [ reviewer ] } = await pool.query(
-        "SELECT * FROM reviewer WHERE name = $1 LIMIT 1",
+        "SELECT * FROM instance_review_progress WHERE name = $1 LIMIT 1",
         [ req.params.name ]
     );
     const { rows: [ instance ] } = await pool.query(

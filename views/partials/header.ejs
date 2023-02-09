@@ -8,6 +8,14 @@
                         <%- locals.reviewer.name %>
                     </span>
                 </div>
+                <div class="ms-auto">
+                    <span>
+                        Instances Reviewed:
+                    </span>
+                    <span class="font-monospace">
+                        <%- locals.reviewer.progress || 0 %>
+                    </span>
+                </div>
             </div>
         </nav>
     <% } %>
