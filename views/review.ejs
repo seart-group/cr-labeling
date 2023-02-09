@@ -13,36 +13,9 @@
                             </h1>
                          </div>
                         <div class="col">
-                            <h1 class="text-end mb-3">
-                                <%
-                                    switch (instance.category) {
-                                        case "C":
-                                %>
-                                    <i class="bi bi-check-square-fill"
-                                       style="color: darkgreen;"
-                                       title="Correct Prediction"
-                                    ></i>
-                                <%
-                                        break;
-                                        case "W":
-                                %>
-                                    <i class="bi bi-x-square-fill"
-                                       style="color: darkred;"
-                                       title="Wrong Prediction"
-                                    ></i>
-                                <%
-                                        break;
-                                        default:
-                                %>
-                                    <i class="bi bi-question-square-fill"
-                                       style="color: darkgoldenrod;"
-                                       title="Unknown..."
-                                    ></i>
-                                <%
-                                        break;
-                                    }
-                                %>
-                            </h1>
+                            <span class="text-end mb-3">
+                                <%- include('./partials/instance/category-icon', { category: instance.category }); %>
+                            </span>
                         </div>
                     </div>
                     <div class="row">

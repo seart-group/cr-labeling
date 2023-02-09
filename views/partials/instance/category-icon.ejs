@@ -1,0 +1,28 @@
+<%
+    switch (category) {
+    case "C":
+%>
+    <i class="bi bi-check-square-fill"
+       style="color: darkgreen;"
+       title="Correct Prediction"
+    ></i>
+<%
+    break;
+    case "W":
+%>
+    <i class="bi bi-x-square-fill"
+       style="color: darkred;"
+       title="Wrong Prediction"
+    ></i>
+<%
+    break;
+    default:
+%>
+    <i class="bi bi-question-square-fill"
+       style="color: darkgoldenrod;"
+       title="Unknown..."
+    ></i>
+<%
+    break;
+}
+%>
