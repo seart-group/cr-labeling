@@ -193,12 +193,9 @@
                     new bootstrap.Toast(element).show();
                 };
 
-                socket.on("disconnect", () => toast(socketDisconnectToast));
-                socket.io.on("reconnect", () => toast(socketReconnectToast));
-
                 const normalize = (name) => {
                     return name.replaceAll(/\s+/g, " ").toLowerCase().trim();
-                }
+                };
 
                 const addOption = (label) => {
                     const created_option = new Option(label.name, label.id);
@@ -226,8 +223,6 @@
                         .catch(() => toast(labelAddToast));
                 });
 
-                socket.on("label_append", (label) => addOption(label));
-
                 labelInstance.addEventListener("submit", (event) => {
                     event.preventDefault();
                     const selected = [ ...labelInstanceSelect.selectedOptions ].map(({ value }) => Number(value));
@@ -247,6 +242,10 @@
                     };
                     axios.post("/instance/discard", payload).then(() => history.go());
                 });
+
+                socket.on("label_append", (label) => addOption(label));
+                socket.on("disconnect", () => toast(socketDisconnectToast));
+                socket.io.on("reconnect", () => toast(socketReconnectToast));
             </script>
         <% } %>
     </body>
