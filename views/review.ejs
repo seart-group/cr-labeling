@@ -189,13 +189,8 @@
                 const socketDisconnectToast = document.getElementById("socket-disconnect-toast");
                 const socketReconnectToast = document.getElementById("socket-reconnect-toast");
 
-                const refresh = () => {
-                    history.go();
-                };
-
-                const toast = (element) => {
-                    new bootstrap.Toast(element).show();
-                };
+                const refresh = () => history.go();
+                const toast = (element) => new bootstrap.Toast(element).show();
 
                 const normalize = (name) => {
                     return name.replaceAll(/\s+/g, " ").toLowerCase().trim();
