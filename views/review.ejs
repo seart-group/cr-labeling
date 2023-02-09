@@ -2,20 +2,7 @@
 <html lang="en">
     <%- include('./partials/head'); %>
     <body class="vh-100 vw-100 d-flex flex-column justify-content-between">
-        <header>
-            <% if (!!reviewer) { %>
-                <nav class="navbar bg-light">
-                    <div class="container-fluid">
-                        <div>
-                            <i class="bi bi-person-fill"></i>
-                            <span class="navbar-brand mb-0 h1">
-                                <%= reviewer.name %>
-                            </span>
-                        </div>
-                    </div>
-                </nav>
-            <% } %>
-        </header>
+        <%- include('./partials/header', { reviewer: reviewer }); %>
         <main>
             <div class="container">
                 <% if (!!reviewer && !!instance) { %>

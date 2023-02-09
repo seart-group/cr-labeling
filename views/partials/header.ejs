@@ -1,0 +1,14 @@
+<header>
+    <% if (!!locals.reviewer) { %>
+        <nav class="navbar bg-light">
+            <div class="container-fluid">
+                <div>
+                    <i class="bi bi-person-fill"></i>
+                    <span class="navbar-brand mb-0 h1">
+                        <%- locals.reviewer.name %>
+                    </span>
+                </div>
+            </div>
+        </nav>
+    <% } %>
+</header>
