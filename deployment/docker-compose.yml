@@ -24,10 +24,10 @@ services:
         condition: any
     healthcheck:
       test: pg_isready -U ${DATABASE_USER} -d ${DATABASE_NAME}
-      start_period: 15s
+      start_period: 60s
       interval: 10s
       timeout: 5s
-      retries: 3
+      retries: 5
 
   cr-labeling-server:
     container_name: cr-labeling-server
