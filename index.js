@@ -45,12 +45,12 @@ app.post("/login", async (req, res) => {
         [ req.body.id ]
     );
     const target = (reviewer)
-        ? `${req.baseUrl}/${reviewer.name}/review`
+        ? `${req.baseUrl}/${reviewer.name}/queue`
         : `${req.baseUrl}/login`;
     res.redirect(target);
 });
 
-app.get("/:name/review", async (req, res) => {
+app.get("/:name/queue", async (req, res) => {
     const { rows: labels } = await pool.query("SELECT * FROM label ORDER BY name");
     const { rows: [ reviewer ] } = await pool.query(
         "SELECT * FROM instance_review_progress WHERE name = $1 LIMIT 1",
