@@ -1,0 +1,54 @@
+bug-fixing -> change value of boolean
+bug-fixing -> modifies if condition
+code removal -> code block
+code removal -> deletes method body
+code removal -> for loop
+code removal -> if statement
+code removal -> method invocation
+code removal -> return statement
+code removal -> switch case
+code removal -> variable
+code-addition -> add missing return
+concurrency -> remove concurrency lock
+concurrency -> remove unnecessary sync guard
+concurrency -> removes synchronized
+concurrency -> use shared variable instead of its copy
+exception handling -> modify thrown exceptions
+exception handling -> modify try-catch
+exception handling -> moves variable assignment to finally block
+exception handling -> removes thrown exception
+exception handling -> removes try-catch
+exception handling -> removes try-finally
+exception handling -> use try-with-resource pattern
+inheritance -> adds call to parent's constructor
+inheritance -> adds modifier (final)
+inheritance -> modify parent’s constructor cal
+inheritance -> removes Override annotation
+inheritance -> removes invocation to parent's constructor
+method invocation -> modifies method invocation
+method invocation -> modifies parameters in method call
+method invocation -> replaces method call
+method visibility -> adds modifier
+method visibility -> modifies modifier
+method visibility -> removes modifier
+readability -> adds/removes "this" keyword
+readability -> adds/removes curly braces
+readability -> merges two code statements
+readability -> remove unneeded null check
+readability -> removes logging information
+readability -> removes parenthesis from return statement
+readability -> removes unneeded object instance
+readability -> removes unneeded return statement
+readability -> removes unneeded semicolon (;)
+readability -> removes unneeded variable cast
+readability -> removes unneeded variable declaration
+readability -> replaces else-if with if
+readability -> replaces if-else with inline if
+readability -> simplifies return statement
+readability -> simplify if condition
+readability -> simplify if-else statement
+return -> modify return type
+return -> modify return value
+type -> modifies variable type
+type -> remove type info from collection
+variable -> add modifier
