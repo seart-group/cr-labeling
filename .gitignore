@@ -251,4 +251,4 @@ dist
 .pnp.*
 
 ### Deployment
-deployment/pgdata/
+deployment/backup/
