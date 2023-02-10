@@ -37,6 +37,19 @@ GROUP BY reviewer.id
 ORDER BY reviewer.id;
 
 CREATE OR REPLACE FUNCTION
+    "complement"(category category)
+    RETURNS category
+AS $$
+BEGIN
+    CASE category
+        WHEN 'C' THEN RETURN 'W';
+        WHEN 'W' THEN RETURN 'C';
+        ELSE RETURN category;
+        END CASE;
+END;
+$$ LANGUAGE PLpgSQL;
+
+CREATE OR REPLACE FUNCTION
     "next_instance"(reviewer_id integer)
     RETURNS SETOF instance
 AS $$
