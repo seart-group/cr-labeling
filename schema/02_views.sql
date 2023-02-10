@@ -1,9 +1,13 @@
 CREATE OR REPLACE VIEW "instance_review_candidate" AS
 SELECT instance.* FROM instance
 LEFT OUTER JOIN instance_review AS review ON instance.id = review.instance_id
-GROUP BY instance.id
+LEFT OUTER JOIN instance_discard AS discard ON instance.id = discard.instance_id
+GROUP BY instance.id, discard.instance_id
 HAVING COUNT(review.id) < 2
-ORDER BY COUNT(review.id) DESC, RANDOM();
+ORDER BY
+    COUNT(review.id) DESC,
+    discard.instance_id IS NOT NULL DESC,
+    RANDOM();
 
 CREATE OR REPLACE VIEW "instance_review_finished" AS
 SELECT instance.* from instance
