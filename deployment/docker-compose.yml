@@ -7,7 +7,7 @@ services:
     hostname: cr-labeling-database
     image: postgres:14.6-alpine
     volumes:
-      - ./pgdata:/var/lib/postgresql/data
+      - data:/var/lib/postgresql/data
       - ../schema/01_schema.sql:/docker-entrypoint-initdb.d/01_schema.sql
       - ../schema/02_views.sql:/docker-entrypoint-initdb.d/02_views.sql
       - ./data/label.txt:/docker-entrypoint-initdb.d/label.txt
@@ -53,6 +53,10 @@ services:
         max_attempts: 3
     ports:
       - "7654:3000"
+
+volumes:
+  data:
+    name: cr-labeling-data
 
 networks:
   default:
