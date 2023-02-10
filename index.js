@@ -74,10 +74,17 @@ app.get("/progress", async (req, res) => {
 
 app.post("/instance/submit", async (req, res) => {
     const payload = req.body;
-    const parameters = [ payload.instance_id, payload.reviewer_id, payload.is_interesting ];
+    const parameters = [
+        payload.instance_id,
+        payload.reviewer_id,
+        payload.is_interesting,
+        payload.remarks
+    ];
 
     const { rows: [ { id: instance_review_id } ] } = await pool.query(
-        "INSERT INTO instance_review(instance_id, reviewer_id, is_interesting) VALUES ($1, $2, $3) RETURNING id",
+        `INSERT INTO instance_review(instance_id, reviewer_id, is_interesting, remarks) 
+         VALUES ($1, $2, $3, $4) 
+         RETURNING id`,
         parameters
     );
 

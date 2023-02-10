@@ -151,6 +151,14 @@
                                         This instance is interesting
                                     </label>
                                 </div>
+                                <div class="form-group mb-2">
+                                    <label for="label-instance-remarks">Remarks</label>
+                                    <textarea id="label-instance-remarks"
+                                              class="form-control"
+                                              style="resize: none"
+                                              rows="10"
+                                    ></textarea>
+                                </div>
                                 <div class="d-grid">
                                     <button type="submit" class="btn btn-primary btn-lg">
                                         Label Instance!
@@ -218,6 +226,7 @@
                 const labelInstance = document.getElementById("label-instance");
                 const labelInstanceSelect = document.getElementById("label-instance-select");
                 const labelInstanceInteresting = document.getElementById("label-instance-interesting");
+                const labelInstanceRemarks = document.getElementById("label-instance-remarks");
                 const discardInstance = document.getElementById("discard-instance");
                 const socketDisconnectToast = document.getElementById("socket-disconnect-toast");
                 const socketReconnectToast = document.getElementById("socket-reconnect-toast");
@@ -262,6 +271,7 @@
                         instance_id: instance_id,
                         reviewer_id: reviewer_id,
                         is_interesting: labelInstanceInteresting.checked,
+                        remarks: labelInstanceRemarks.value || null,
                         label_ids: selected
                     };
                     axios.post("/instance/submit", payload).then(refresh);
