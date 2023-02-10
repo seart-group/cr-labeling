@@ -30,6 +30,34 @@ services:
       timeout: 5s
       retries: 5
 
+  cr-labeling-backup:
+    container_name: cr-labeling-backup
+    hostname: cr-labeling-backup
+    image: tiredofit/db-backup:latest
+    volumes:
+      - ./backup:/backup
+    networks: [ default ]
+    links: [ cr-labeling-database ]
+    environment:
+      DB_TYPE: pgsql
+      DB_HOST: cr-labeling-database
+      DB_NAME: ${DATABASE_NAME}
+      DB_USER: ${DATABASE_USER}
+      DB_PASS: ${DATABASE_PASS}
+      DB_DUMP_FREQ: ${TWELVE_HOURS_IN_MINUTES}
+      DB_DUMP_BEGIN: +${TWELVE_HOURS_IN_MINUTES}
+      SPLIT_DB: FALSE
+      CHECKSUM: SHA1
+      COMPRESSION: GZ
+      EXTRA_OPTS: --data-only
+      CONTAINER_ENABLE_MONITORING: FALSE
+    depends_on:
+      cr-labeling-database:
+        condition: service_healthy
+    deploy:
+      restart_policy:
+        condition: any
+
   cr-labeling-server:
     container_name: cr-labeling-server
     hostname: cr-labeling-server
