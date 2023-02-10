@@ -35,7 +35,7 @@ services:
     hostname: cr-labeling-backup
     image: tiredofit/db-backup:latest
     volumes:
-      - ./backup:/backup
+      - /tmp/cr-labeling/backup:/backup
     networks: [ default ]
     links: [ cr-labeling-database ]
     environment:
