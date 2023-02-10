@@ -4,6 +4,7 @@ services:
 
   cr-labeling-database:
     container_name: cr-labeling-database
+    hostname: cr-labeling-database
     image: postgres:14.6-alpine
     volumes:
       - ./pgdata:/var/lib/postgresql/data
@@ -31,6 +32,7 @@ services:
 
   cr-labeling-server:
     container_name: cr-labeling-server
+    hostname: cr-labeling-server
     image: cr-labeling/server:latest
     build:
       context: ../
