@@ -42,6 +42,7 @@ CREATE TABLE "instance_review" (
   "instance_id" integer,
   "reviewer_id" integer,
   "is_interesting" boolean NOT NULL DEFAULT false,
+  "invert_category" boolean NOT NULL DEFAULT false,
   "reviewed_at" timestamp DEFAULT (now()),
   "remarks" text
 );
