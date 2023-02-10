@@ -92,9 +92,11 @@
                             </button>
                         </div>
                         <div class="col text-start">
-                            <button id="discard-instance"
-                                    type="button"
+                            <button type="button"
                                     class="btn btn-danger"
+                                    data-bs-toggle="offcanvas"
+                                    data-bs-target="#discard-offcanvas"
+                                    aria-controls="discard-offcanvas"
                             >
                                 Discard
                             </button>
@@ -177,6 +179,33 @@
                             %>
                         </div>
                     </div>
+                    <div id="discard-offcanvas"
+                         class="offcanvas offcanvas-end"
+                         aria-labelledby="discard-offcanvas-title"
+                    >
+                        <div class="offcanvas-header">
+                            <h5 class="offcanvas-title" id="discard-offcanvas-title">Provide Additional Information</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close">
+                            </button>
+                        </div>
+                        <div class="offcanvas-body">
+                            <form id="discard-instance">
+                                <div class="form-group mb-2">
+                                    <label for="label-instance-remarks">Remarks</label>
+                                    <textarea id="discard-instance-remarks"
+                                              class="form-control"
+                                              style="resize: none"
+                                              rows="10"
+                                    ></textarea>
+                                </div>
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-danger btn-lg">
+                                        Discard Instance!
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                     <%-
                         include(
                             './partials/toast',
@@ -228,6 +257,7 @@
                 const labelInstanceInteresting = document.getElementById("label-instance-interesting");
                 const labelInstanceRemarks = document.getElementById("label-instance-remarks");
                 const discardInstance = document.getElementById("discard-instance");
+                const discardInstanceRemarks = document.getElementById("discard-instance-remarks");
                 const socketDisconnectToast = document.getElementById("socket-disconnect-toast");
                 const socketReconnectToast = document.getElementById("socket-reconnect-toast");
 
@@ -277,10 +307,12 @@
                     axios.post("/instance/submit", payload).then(refresh);
                 });
 
-                discardInstance.addEventListener("click", () => {
+                discardInstance.addEventListener("submit", (event) => {
+                    event.preventDefault();
                     const payload = {
                         instance_id: instance_id,
-                        reviewer_id: reviewer_id
+                        reviewer_id: reviewer_id,
+                        remarks: discardInstanceRemarks.value || null
                     };
                     axios.post("/instance/discard", payload).then(refresh);
                 });
