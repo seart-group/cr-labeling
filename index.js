@@ -78,13 +78,13 @@ app.post("/instance/submit", async (req, res) => {
         payload.instance_id,
         payload.reviewer_id,
         payload.is_interesting,
+        payload.invert_category,
         payload.remarks
     ];
 
     const { rows: [ { id: instance_review_id } ] } = await pool.query(
-        `INSERT INTO instance_review(instance_id, reviewer_id, is_interesting, remarks) 
-         VALUES ($1, $2, $3, $4) 
-         RETURNING id`,
+        `INSERT INTO instance_review(instance_id, reviewer_id, is_interesting, invert_category, remarks) 
+         VALUES ($1, $2, $3, $4, $5) RETURNING id`,
         parameters
     );
 
