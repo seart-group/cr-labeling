@@ -1,7 +1,7 @@
 CREATE OR REPLACE FUNCTION -- redefined later
     "complement"(category category)
     RETURNS category
-AS $$ BEGIN RETURN null; END; $$ LANGUAGE PLpgSQL;
+AS $$ BEGIN RETURN NULL; END; $$ LANGUAGE PLpgSQL;
 
 CREATE OR REPLACE VIEW "instance_review_candidate" AS
 SELECT instance.* FROM instance
@@ -44,8 +44,8 @@ FROM instance_review_bucket AS bucket
 WHERE bucket.count > 166;
 
 CREATE OR REPLACE VIEW "instance_review_progress" AS
-SELECT reviewer.*, count(review.reviewer_id) AS progress FROM reviewer
-LEFT OUTER JOIN instance_review review on reviewer.id = review.reviewer_id
+SELECT reviewer.*, COUNT(review.reviewer_id) AS progress FROM reviewer
+LEFT OUTER JOIN instance_review review ON reviewer.id = review.reviewer_id
 GROUP BY reviewer.id
 ORDER BY reviewer.id;
 
