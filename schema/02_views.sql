@@ -1,3 +1,8 @@
+CREATE OR REPLACE FUNCTION -- redefined later
+    "complement"(category category)
+    RETURNS category
+AS $$ BEGIN RETURN null; END; $$ LANGUAGE PLpgSQL;
+
 CREATE OR REPLACE VIEW "instance_review_candidate" AS
 SELECT instance.* FROM instance
 LEFT OUTER JOIN instance_review AS review ON instance.id = review.instance_id
@@ -10,9 +15,17 @@ ORDER BY
     RANDOM();
 
 CREATE OR REPLACE VIEW "instance_review_finished" AS
-SELECT instance.* from instance
-LEFT OUTER JOIN instance_review AS review ON instance.id = review.instance_id
-GROUP BY instance.id
+SELECT
+    instance.id,
+    instance.task,
+    instance.work,
+    CASE WHEN EVERY(review.invert_category)
+         THEN COMPLEMENT(instance.category)
+         ELSE instance.category
+    END AS category
+FROM instance
+INNER JOIN instance_review AS review ON instance.id = review.instance_id
+GROUP BY instance.id, instance.task, instance.work
 HAVING COUNT(review.id) >= 2;
 
 CREATE OR REPLACE VIEW "instance_review_bucket" AS
