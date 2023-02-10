@@ -20,9 +20,7 @@ services:
       POSTGRES_DB: ${DATABASE_NAME}
       POSTGRES_USER: ${DATABASE_USER}
       POSTGRES_PASSWORD: ${DATABASE_PASS}
-    deploy:
-      restart_policy:
-        condition: any
+    restart: always
     healthcheck:
       test: pg_isready -U ${DATABASE_USER} -d ${DATABASE_NAME}
       start_period: 60s
@@ -54,9 +52,7 @@ services:
     depends_on:
       cr-labeling-database:
         condition: service_healthy
-    deploy:
-      restart_policy:
-        condition: any
+    restart: always
 
   cr-labeling-server:
     container_name: cr-labeling-server
