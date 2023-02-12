@@ -67,12 +67,18 @@ CREATE OR REPLACE FUNCTION
     RETURNS SETOF instance
 AS $$
     SELECT candidate.* FROM instance_review_candidate AS candidate
-    LEFT OUTER JOIN instance_review AS review ON candidate.id = review.instance_id
-    LEFT OUTER JOIN instance_discard AS discard ON candidate.id = discard.instance_id
     WHERE
-        review.reviewer_id IS DISTINCT FROM next_instance.reviewer_id
+        candidate.id NOT IN (
+            SELECT review.instance_id
+            FROM instance_review AS review
+            WHERE review.reviewer_id = next_instance.reviewer_id
+        )
     AND
-        discard.reviewer_id IS DISTINCT FROM next_instance.reviewer_id
+        candidate.id NOT IN (
+            SELECT discard.instance_id
+            FROM instance_discard AS discard
+            WHERE discard.reviewer_id = next_instance.reviewer_id
+        )
     AND
         NOT EXISTS(
             SELECT FROM instance_review_bucket_filled AS filled
