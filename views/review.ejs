@@ -128,6 +128,12 @@
                                     </button>
                                 </div>
                             </form>
+                            <input type="text"
+                                   id="label-filter"
+                                   class="form-control mb-2"
+                                   placeholder="Filter existing labels..."
+                                   aria-label="Filter Labels"
+                            />
                             <form id="label-instance">
                                 <select id="label-instance-select"
                                         class="form-select mb-2"
@@ -260,6 +266,7 @@
                 const socket = io();
                 const reviewer_id = Number(`<%- reviewer.id %>`);
                 const instance_id = Number(`<%- instance.id %>`);
+                const labelFilter = document.getElementById("label-filter");
                 const labelAddForm = document.getElementById("label-add");
                 const labelAddInput = document.getElementById("label-add-input");
                 const labelAddToast = document.getElementById("label-add-toast");
@@ -293,6 +300,21 @@
                         }
                     }
                 };
+
+                labelFilter.addEventListener("input", () => {
+                    const search = normalize(labelFilter.value);
+                    const existing_options = labelInstanceSelect.options;
+                    for (let idx = 0; idx < existing_options.length; idx++) {
+                        const current_option = existing_options.item(idx);
+                        const current_option_classes = current_option.classList;
+                        const label = current_option.innerHTML;
+                        if (label.includes(search)) {
+                            current_option_classes.remove("d-none");
+                        } else {
+                            current_option_classes.add("d-none");
+                        }
+                    }
+                });
 
                 labelAddForm.addEventListener("submit", (event) => {
                     event.preventDefault();
