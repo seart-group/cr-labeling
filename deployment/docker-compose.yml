@@ -27,6 +27,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    ports:
+      - "${DATABASE_PORT}:5432"
 
   cr-labeling-backup:
     container_name: cr-labeling-backup
@@ -64,7 +66,6 @@ services:
     networks: [ default ]
     environment:
       DATABASE_HOST: cr-labeling-database
-      DATABASE_PORT: ${DATABASE_PORT}
       DATABASE_NAME: ${DATABASE_NAME}
       DATABASE_USER: ${DATABASE_USER}
       DATABASE_PASS: ${DATABASE_PASS}
