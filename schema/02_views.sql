@@ -75,7 +75,7 @@ BEGIN
         WHEN 'C' THEN RETURN 'W';
         WHEN 'W' THEN RETURN 'C';
         ELSE RETURN category;
-        END CASE;
+    END CASE;
 END;
 $$ LANGUAGE PLpgSQL;
 
