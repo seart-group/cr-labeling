@@ -2,12 +2,14 @@
     width: 550px!important;
 }
 
-.col-border-x {
-    border: 1px solid rgba(var(--bs-body-color-rgb), 0.25)!important;
-    border-bottom: none!important;
-    border-top: none!important;
-}
+@media only screen and (min-width: 768px) {
+    .col-border-x {
+        border: 1px solid rgba(var(--bs-body-color-rgb), 0.25)!important;
+        border-bottom: none!important;
+        border-top: none!important;
+    }
 
-.col-border-x:not(:first-child) {
-    border-left: none!important;
+    .col-border-x:not(:first-child) {
+        border-left: none!important;
+    }
 }
