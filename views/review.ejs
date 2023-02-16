@@ -33,6 +33,7 @@
                     </div>
                     <div class="row">
                         <% const language = instance.task === "C&NL2C" ? "java" : "plaintext"; %>
+                        <div class="col-auto d-none d-md-block vr g-0"></div>
                         <div class="col overflow-hidden">
                             <label class="mb-2">Input Source Code</label>
                             <%-
@@ -78,6 +79,7 @@
                                 );
                             %>
                         </div>
+                        <div class="col-auto d-none d-md-block vr g-0"></div>
                     </div>
                     <div class="row">
                         <div class="col text-end">
@@ -287,6 +289,7 @@
                     return name.replaceAll(/\s+/g, " ").toLowerCase().trim();
                 };
 
+                // TODO: Use binary search as opposed to iterating over the options
                 const addOption = (label) => {
                     const created_option = new Option(label.name, label.id);
                     const existing_options = labelInstanceSelect.options;
@@ -301,6 +304,7 @@
                     }
                 };
 
+                // TODO: Add debounce effect so that the callback is not instant
                 labelFilter.addEventListener("input", () => {
                     const search = normalize(labelFilter.value);
                     const existing_options = labelInstanceSelect.options;
