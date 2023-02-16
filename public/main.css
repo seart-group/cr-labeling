@@ -1,3 +1,5 @@
-#label-offcanvas {
+#label-offcanvas,
+#discard-offcanvas
+{
     width: 550px!important;
 }
