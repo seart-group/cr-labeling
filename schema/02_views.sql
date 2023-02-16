@@ -109,3 +109,32 @@ AS $$
     LIMIT 1
 ;
 $$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION
+    "instance_review_details"(instance_id integer)
+    RETURNS TABLE (
+        reviewer_id integer,
+        reviewer_name text,
+        invert_category boolean,
+        remarks text,
+        labels text[]
+    )
+AS $$
+    #variable_conflict use_variable
+    BEGIN
+        RETURN QUERY
+        SELECT
+            review.reviewer_id AS reviewer_id,
+            reviewer.name AS reviewer_name,
+            review.invert_category AS invert_category,
+            review.remarks AS remarks,
+            ARRAY_AGG(label.name ORDER BY label.name) AS labels
+        FROM instance_review AS review
+        INNER JOIN reviewer on review.reviewer_id = reviewer.id
+        INNER JOIN instance_review_label review_label
+            ON review.id = review_label.instance_review_id
+        INNER JOIN label ON label.id = review_label.label_id
+        WHERE review.instance_id = instance_id
+        GROUP BY review.reviewer_id, reviewer.name, review.invert_category, review.remarks;
+    END;
+$$ LANGUAGE PLpgSQL;
