@@ -52,7 +52,7 @@
                 next: `<i class="bi bi-chevron-right"></i>`,
                 last: `<i class="bi bi-chevron-double-right"></i>`,
                 onPageClick: function (_, page) {
-                    location.assign(`?page=${page}`);
+                    window.open(`/conflicts?page=${page}`, "_self");
                 }
             });
         </script>
