@@ -122,10 +122,9 @@ app.post("/label", (req, res) => {
         });
 });
 
-// TODO: Replace later with a query into the "conflict" view
 app.get("/conflicts/:id", async (req, res) => {
     let target = [ req.params.id ];
-    const { rows: [ instance ] } = await pool.query("SELECT * FROM instance WHERE id = $1", target);
+    const { rows: [ instance ] } = await pool.query("SELECT * FROM instance_review_conflict WHERE id = $1", target);
     const { rows: reviews } = await pool.query("SELECT * FROM instance_review_details($1)", target);
     const { rows: discards } = await pool.query("SELECT * FROM instance_discard_details($1)", target);
     res.render("conflict", {

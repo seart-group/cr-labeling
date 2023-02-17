@@ -66,6 +66,26 @@ LEFT OUTER JOIN instance_review review ON reviewer.id = review.reviewer_id
 GROUP BY reviewer.id
 ORDER BY reviewer.id;
 
+CREATE OR REPLACE VIEW "instance_review_conflict" AS
+SELECT DISTINCT instance.* FROM instance
+INNER JOIN instance_review_finished AS finished ON instance.id = finished.id
+INNER JOIN instance_review AS review ON finished.id = review.instance_id
+INNER JOIN instance_review_label AS review_label
+    ON review.id = review_label.instance_review_id
+INNER JOIN label ON label.id = review_label.label_id
+GROUP BY instance.id, label.id
+HAVING
+    COUNT(label.id) < (
+        SELECT COUNT(instance_review.id)
+        FROM instance_review
+        WHERE instance_review.instance_id = instance.id
+    )
+OR
+    (
+        bool_or(review.invert_category) AND NOT bool_and(review.invert_category)
+    )
+ORDER BY instance.id;
+
 CREATE OR REPLACE FUNCTION
     "complement"(category category)
     RETURNS category
