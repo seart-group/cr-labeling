@@ -138,3 +138,24 @@ AS $$
         GROUP BY review.reviewer_id, reviewer.name, review.invert_category, review.remarks;
     END;
 $$ LANGUAGE PLpgSQL;
+
+CREATE OR REPLACE FUNCTION
+    "instance_discard_details"(instance_id integer)
+    RETURNS TABLE(
+        reviewer_id integer,
+        reviewer_name text,
+        remarks text
+    )
+AS $$
+    #variable_conflict use_variable
+    BEGIN
+        RETURN QUERY
+        SELECT
+            reviewer.id AS reviewer_id,
+            reviewer.name AS reviewer_name,
+            discard.remarks AS remarks
+        FROM instance_discard AS discard
+        INNER JOIN reviewer on discard.reviewer_id = reviewer.id
+        WHERE discard.instance_id = instance_id;
+    END;
+$$ LANGUAGE PLpgSQL;
