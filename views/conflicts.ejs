@@ -39,5 +39,19 @@
         <%- include('./partials/footer'); %>
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.3/dist/jquery.min.js" integrity="sha384-Ft/vb48LwsAEtgltj7o+6vtS2esTU9PCpDqcXs4OCVQFZu5BqprHtUCZ4kjK+bpE" crossorigin="anonymous"></script>
         <%- include('./partials/scripts/general'); %>
+        <script src="https://cdn.jsdelivr.net/npm/twbs-pagination@1.4.2/jquery.twbsPagination.min.js" integrity="sha384-AzpIEA+V2ntWh1KXh0Nz69l/mYOfBMOiw6lbuvWaVKYfuEooT5t5k/qyU0W0B7uk" crossorigin="anonymous"></script>
+        <script>
+            $('#conflicts-pagination').twbsPagination({
+                href: true,
+                visiblePages: 5,
+                hideOnlyOnePage: true,
+                startPage: Number(`<%- paginate.page %>`),
+                totalPages: Number(`<%- pagination.pages %>`),
+                first: `<i class="bi bi-chevron-double-left"></i>`,
+                prev: `<i class="bi bi-chevron-left"></i>`,
+                next: `<i class="bi bi-chevron-right"></i>`,
+                last: `<i class="bi bi-chevron-double-right"></i>`
+            });
+        </script>
     </body>
 </html>
