@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('./partials/head'); %>
+    <body class="vh-100 vw-100 d-flex flex-column justify-content-between">
+        <%- include('./partials/header'); %>
+        <main>
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <h1 class="text-center mb-3">Conflicts</h1>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <div class="list-group">
+                            <%
+                                conflicts.forEach((conflict) => {
+                                    const id = conflict.id;
+                            %>
+                                <a id="conflict-<%- id %>"
+                                   href="/conflicts/<%- id %>"
+                                   class="list-group-item list-group-item-dark list-group-item-action"
+                                >
+                                    Conflict: <%- id %>
+                                </a>
+                            <%
+                                });
+                            %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <%- include('./partials/footer'); %>
+        <%- include('./partials/scripts/general'); %>
+        <%- include('./partials/scripts/hljs'); %>
+    </body>
+</html>
