@@ -116,6 +116,7 @@ CREATE OR REPLACE FUNCTION
         reviewer_id integer,
         reviewer_name text,
         invert_category boolean,
+        reviewed_at timestamp,
         remarks text,
         labels text[]
     )
@@ -127,6 +128,7 @@ AS $$
             reviewer.id AS reviewer_id,
             reviewer.name AS reviewer_name,
             review.invert_category AS invert_category,
+            review.reviewed_at AS reviewed_at,
             review.remarks AS remarks,
             ARRAY_AGG(label.name ORDER BY label.name) AS labels
         FROM instance_review AS review
@@ -135,7 +137,12 @@ AS $$
             ON review.id = review_label.instance_review_id
         INNER JOIN label ON label.id = review_label.label_id
         WHERE review.instance_id = instance_id
-        GROUP BY reviewer.id, reviewer.name, review.invert_category, review.remarks;
+        GROUP BY
+            reviewer.id,
+            reviewer.name,
+            review.invert_category,
+            review.reviewed_at,
+            review.remarks;
     END;
 $$ LANGUAGE PLpgSQL;
 
@@ -144,6 +151,7 @@ CREATE OR REPLACE FUNCTION
     RETURNS TABLE(
         reviewer_id integer,
         reviewer_name text,
+        discarded_at timestamp,
         remarks text
     )
 AS $$
@@ -153,6 +161,7 @@ AS $$
         SELECT
             reviewer.id AS reviewer_id,
             reviewer.name AS reviewer_name,
+            discard.discarded_at AS discarded_at,
             discard.remarks AS remarks
         FROM instance_discard AS discard
         INNER JOIN reviewer on discard.reviewer_id = reviewer.id
