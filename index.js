@@ -5,6 +5,7 @@ const { Server: IO } = require("socket.io");
 require("dotenv").config();
 const path = require("path");
 const express = require("express");
+const paginate = require("express-paginate");
 const nodeEnv = process.env.NODE_ENV || "development";
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
@@ -29,6 +30,8 @@ app.use("/", express.static(path.join(__dirname, "public")));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(paginate.middleware(10, 50));
 
 app.get("/", (req, res) => {
     res.redirect(`${req.baseUrl}/login`);
