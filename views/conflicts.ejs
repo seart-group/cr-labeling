@@ -21,7 +21,7 @@
                             %>
                                 <a id="conflict-<%- id %>"
                                    href="/conflicts/<%- id %>"
-                                   class="list-group-item list-group-item-dark list-group-item-action"
+                                   class="list-group-item list-group-item-dark list-group-item-action font-monospace"
                                 >
                                     Conflict: <%- id %>
                                 </a>
@@ -42,7 +42,6 @@
         <script src="https://cdn.jsdelivr.net/npm/twbs-pagination@1.4.2/jquery.twbsPagination.min.js" integrity="sha384-AzpIEA+V2ntWh1KXh0Nz69l/mYOfBMOiw6lbuvWaVKYfuEooT5t5k/qyU0W0B7uk" crossorigin="anonymous"></script>
         <script>
             $('#conflicts-pagination').twbsPagination({
-                href: true,
                 visiblePages: 5,
                 hideOnlyOnePage: true,
                 startPage: Number(`<%- paginate.page %>`),
@@ -50,7 +49,13 @@
                 first: `<i class="bi bi-chevron-double-left"></i>`,
                 prev: `<i class="bi bi-chevron-left"></i>`,
                 next: `<i class="bi bi-chevron-right"></i>`,
-                last: `<i class="bi bi-chevron-double-right"></i>`
+                last: `<i class="bi bi-chevron-double-right"></i>`,
+                onPageClick: function (_, page) {
+                    const params = new URLSearchParams(window.location.search);
+                    params.set("page", page);
+                    const new_path_query = `${window.location.pathname}?${params.toString()}`;
+                    history.pushState(null, "", new_path_query);
+                }
             });
         </script>
     </body>
