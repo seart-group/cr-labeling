@@ -1,0 +1,220 @@
+<%
+    Array.prototype.union = function (other) {
+        return Array.from(new Set(this.concat(other)));
+    }
+
+    Array.prototype.intersection = function (other) {
+        return Array.from(new Set(this.filter((element) => other.includes(element))));
+    }
+
+    Array.prototype.difference = function (other) {
+        return Array.from(new Set(this.filter((element) => !other.includes(element))));
+    }
+
+    Date.prototype.toHumanReadableString = function () {
+        return this.toLocaleString('en-GB').replace(",", "");
+    }
+
+    const labels_union = reviews.map((review) => review.labels).reduce((l1, l2) => l1.union(l2));
+    const labels_intersection = reviews.map((review) => review.labels).reduce((l1, l2) => l1.intersection(l2));
+    const labels_difference = labels_union.difference(labels_intersection);
+%>
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('./partials/head'); %>
+    <body class="vh-100 vw-100 d-flex flex-column justify-content-between">
+        <%- include('./partials/header'); %>
+        <main>
+            <div class="container">
+                <%
+                    let task_title;
+                    switch (instance.task) {
+                    case "C&NL2C":
+                        task_title = "Code & Natural Language to Code";
+                        break;
+                    case "C2NL":
+                        task_title = "Code to Natural Language";
+                        break;
+                    default:
+                        task_title = "Unknown";
+                    }
+                %>
+                <div class="row">
+                    <div class="col d-flex justify-content-start">
+                        <h1 class="mb-3" title="<%- task_title %>">
+                            <%- instance.task %>
+                        </h1>
+                    </div>
+                    <div class="col d-flex justify-content-end">
+                        <span class="mb-3 h1">
+                            <%- include('./partials/instance/category-icon', { category: instance.category }); %>
+                        </span>
+                    </div>
+                </div>
+                <div class="row">
+                    <% const language = instance.task === "C&NL2C" ? "java" : "plaintext"; %>
+                    <div class="col-12 col-md-6 col-lg overflow-hidden">
+                        <label class="mb-2">Input Source Code</label>
+                        <%-
+                            include(
+                                './partials/instance/code-display',
+                                {
+                                    language: "java",
+                                    input: instance.input_code
+                                }
+                            );
+                        %>
+                        <label class="mb-2">Input Comment</label>
+                        <%-
+                            include(
+                                './partials/instance/code-display',
+                                {
+                                    language: "plaintext",
+                                    input: instance.input_nl
+                                }
+                            );
+                        %>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg overflow-hidden">
+                        <label class="mb-2">Actual Output</label>
+                        <%-
+                            include(
+                                './partials/instance/code-display',
+                                {
+                                    language: language,
+                                    input: instance.output
+                                }
+                            );
+                        %>
+                        <label class="mb-2">Expected Output</label>
+                        <%-
+                            include(
+                                './partials/instance/code-display',
+                                {
+                                    language: language,
+                                    input: instance.target
+                                }
+                            );
+                        %>
+                    </div>
+                    <div class="col-12 col-md-12 col-lg-3 overflow-hidden">
+                        <label class="mb-2">Reviewers</label>
+                        <div class="border rounded bg-light mb-3" style="max-height: 554px!important; overflow-y: scroll!important;">
+                            <%
+                                reviews.forEach((review) => {
+                            %>
+                                <div class="m-2">
+                                    <div class="border rounded bg-white d-flex flex-column">
+                                        <div class="p-2">
+                                            <div>
+                                                <i class="bi bi-person-fill"></i>
+                                                <span><%- review.reviewer_name %></span>
+                                            </div>
+                                            <div>
+                                                <i class="bi bi-eye-fill" title="Reviewed at"></i>
+                                                <span><%- review.reviewed_at.toHumanReadableString() %></span>
+                                            </div>
+                                        </div>
+                                        <div class="px-2">
+                                            <%
+                                                review.labels.forEach((label) => {
+                                                    const text_bg_class = (labels_intersection.includes(label))
+                                                            ? "text-bg-success"
+                                                            : "text-bg-danger";
+                                            %>
+                                                <span title="<%- label %>"
+                                                      class="
+                                                      badge
+                                                      rounded-pill
+                                                      d-block
+                                                      text-start
+                                                      text-truncate
+                                                      <%- text_bg_class %>
+                                                      user-select-none
+                                                      mb-1"
+                                                >
+                                                    <%- label %>
+                                                </span>
+                                            <%
+                                                });
+                                            %>
+                                        </div>
+                                        <div class="p-2">
+                                            <%
+                                                let category_inverse;
+                                                switch (instance.category) {
+                                                case "C":
+                                                    category_inverse = "wrong";
+                                                    break;
+                                                case "W":
+                                                    category_inverse = "correct";
+                                                    break;
+                                                default:
+                                                    category_inverse = "???";
+                                                }
+
+                                                if (instance.category === "W") {
+                                            %>
+                                                Should be <%- category_inverse %>:
+                                                <input type="checkbox"
+                                                       class="form-check-input"
+                                                       aria-label="Should be opposite category"
+                                                       disabled
+                                                       <%- (review.invert_category) ? "checked" : "" %>
+                                                />
+                                            <% } %>
+                                        </div>
+                                        <% if (review.remarks) { %>
+                                            <label class="px-2" for="reviewer-<%- review.reviewer_id %>-remark">
+                                                Remarks:
+                                            </label>
+                                            <div id="reviewer-<%- review.reviewer_id %>-remark" class="fst-italic p-2">
+                                                "<%- review.remarks %>"
+                                            </div>
+                                        <% } %>
+                                    </div>
+                                </div>
+                            <% }); %>
+                            <% discards.forEach((discard) => { %>
+                                <div class="m-2">
+                                    <div class="
+                                        border
+                                        border-danger
+                                        rounded
+                                        bg-danger
+                                        bg-opacity-75
+                                        text-white
+                                        d-flex
+                                        flex-column"
+                                    >
+                                        <div class="p-2">
+                                            <div>
+                                                <i class="bi bi-person-fill"></i>
+                                                <span><%- discard.reviewer_name %></span>
+                                            </div>
+                                            <div>
+                                                <i class="bi bi-eye-slash-fill" title="Discarded at"></i>
+                                                <span><%- discard.discarded_at.toHumanReadableString() %></span>
+                                            </div>
+                                        </div>
+                                        <% if (discard.remarks) { %>
+                                            <label class="px-2" for="reviewer-<%- discard.reviewer_id %>-remark">
+                                                Remarks:
+                                            </label>
+                                            <div id="reviewer-<%- discard.reviewer_id %>-remark" class="fst-italic p-2">
+                                                "<%- discard.remarks %>"
+                                            </div>
+                                        <% } %>
+                                    </div>
+                                </div>
+                            <% }); %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <%- include('./partials/footer'); %>
+        <%- include('./partials/scripts/general'); %>
+        <%- include('./partials/scripts/hljs'); %>
+    </body>
+</html>
