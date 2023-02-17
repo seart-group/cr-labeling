@@ -125,6 +125,27 @@ app.post("/label", (req, res) => {
         });
 });
 
+app.get("/conflicts", async (req, res) => {
+    const current = req.query.page || 1;
+    const limit = req.query.limit;
+    const { rows: conflicts } = await pool.query(
+        "SELECT id FROM instance_review_conflict OFFSET $1 LIMIT $2",
+        [ (current - 1) * limit, limit ]
+    );
+    const { rows: [ { count: items } ] } = await pool.query(
+        "SELECT COUNT(id) FROM instance_review_conflict"
+    );
+    const pages = Math.ceil(items / req.query.limit);
+    res.render("conflicts", {
+        conflicts: conflicts,
+        pagination: {
+            items: items,
+            pages: pages,
+            current: current,
+        }
+    });
+});
+
 app.get("/conflicts/:id", async (req, res) => {
     let params = [ req.params.id ];
     const { rows: [ instance ] } = await pool.query("SELECT * FROM instance_review_conflict WHERE id = $1", params);
