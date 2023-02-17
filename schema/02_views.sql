@@ -124,7 +124,7 @@ AS $$
     BEGIN
         RETURN QUERY
         SELECT
-            review.reviewer_id AS reviewer_id,
+            reviewer.id AS reviewer_id,
             reviewer.name AS reviewer_name,
             review.invert_category AS invert_category,
             review.remarks AS remarks,
@@ -135,7 +135,7 @@ AS $$
             ON review.id = review_label.instance_review_id
         INNER JOIN label ON label.id = review_label.label_id
         WHERE review.instance_id = instance_id
-        GROUP BY review.reviewer_id, reviewer.name, review.invert_category, review.remarks;
+        GROUP BY reviewer.id, reviewer.name, review.invert_category, review.remarks;
     END;
 $$ LANGUAGE PLpgSQL;
 
