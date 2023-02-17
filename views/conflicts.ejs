@@ -44,6 +44,7 @@
             $('#conflicts-pagination').twbsPagination({
                 visiblePages: 5,
                 hideOnlyOnePage: true,
+                initiateStartPageClick: false,
                 startPage: Number(`<%- paginate.page %>`),
                 totalPages: Number(`<%- pagination.pages %>`),
                 first: `<i class="bi bi-chevron-double-left"></i>`,
@@ -51,10 +52,7 @@
                 next: `<i class="bi bi-chevron-right"></i>`,
                 last: `<i class="bi bi-chevron-double-right"></i>`,
                 onPageClick: function (_, page) {
-                    const params = new URLSearchParams(window.location.search);
-                    params.set("page", page);
-                    const new_path_query = `${window.location.pathname}?${params.toString()}`;
-                    history.pushState(null, "", new_path_query);
+                    location.assign(`?page=${page}`);
                 }
             });
         </script>
