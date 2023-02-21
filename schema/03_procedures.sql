@@ -24,6 +24,7 @@ AS $$
         reviewer integer;
         reviewers integer[];
     BEGIN
+        -- Copy parameters to avoid ambiguity
         _instance_id := discard_reviewed_instances.instance_id;
         _remarks := discard_reviewed_instances.remarks;
         -- Record reviewers that have already reviewed the instance
