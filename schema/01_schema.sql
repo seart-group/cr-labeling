@@ -1,3 +1,5 @@
+-- https://dbdiagram.io/d/63da3c0c296d97641d7da163
+
 CREATE TYPE "task" AS ENUM (
   'C&NL2C',
   'C2NL'
