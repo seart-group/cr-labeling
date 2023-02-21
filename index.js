@@ -71,8 +71,12 @@ app.get("/:name/queue", async (req, res) => {
 });
 
 app.get("/progress", async (req, res) => {
+    const { rows: buckets } = await pool.query("SELECT * FROM instance_review_bucket");
     const { rows: reviewers } = await pool.query("SELECT * FROM instance_review_progress");
-    res.render("progress", { reviewers: reviewers });
+    res.render("progress", {
+        buckets: buckets,
+        reviewers: reviewers
+    });
 });
 
 app.post("/instance/submit", async (req, res) => {
