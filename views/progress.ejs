@@ -25,6 +25,78 @@
                             </tbody>
                         </table>
                     </div>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-lg-6 col-md-8 col-12">
+                        <table class="table table-light table-striped table-bordered caption-top">
+                            <caption>Bucket Progress For Each Task, Work and Category</caption>
+                            <thead>
+                            <tr>
+                                <th scope="col">Task</th>
+                                <th class="text-center" scope="col">Work</th>
+                                <th class="text-center" scope="col">Category</th>
+                                <th class="text-end" scope="col">Count</th>
+                            </tr>
+                            </thead>
+                            <tbody class="table-group-divider">
+                                <%
+                                    buckets.forEach((bucket) => {
+                                        let task_title;
+                                        switch (bucket.task) {
+                                        case "C&NL2C":
+                                            task_title = "Code & Natural Language to Code";
+                                            break;
+                                        case "C2NL":
+                                            task_title = "Code to Natural Language";
+                                            break;
+                                        default:
+                                            task_title = "Unknown";
+                                        }
+
+                                        let category_title;
+                                        let category_icon;
+                                        let category_color;
+                                        switch (bucket.category) {
+                                        case "C":
+                                            category_title = "Correct";
+                                            category_icon = "check-lg";
+                                            category_color = "success";
+                                            break;
+                                        case "W":
+                                            category_title = "Wrong";
+                                            category_icon = "x-lg"
+                                            category_color = "danger";
+                                            break;
+                                        default:
+                                            category_title = "Unknown";
+                                            category_icon = "question-lg";
+                                            category_color = "warning";
+                                        }
+                                %>
+                                    <tr>
+                                        <th scope="row">
+                                            <span title="<%- task_title %>">
+                                                <%- bucket.task %>
+                                            </span>
+                                        </th>
+                                        <td class="text-center">
+                                            <%- bucket.work %>
+                                        </td>
+                                        <td class="text-center">
+                                            <i title="<%- category_title %> Predictions"
+                                               class="bi bi-<%- category_icon %> text-<%- category_color %>">
+                                            </i>
+                                        </td>
+                                        <td class="text-end"><%- bucket.count %></td>
+                                    </tr>
+                                <%
+                                    });
+                                %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
                     <div class="col-12">
                         <%- include('./partials/home-button'); %>
                     </div>
