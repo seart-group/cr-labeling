@@ -24,8 +24,8 @@ AS $$
         reviewer integer;
         reviewers integer[];
     BEGIN
-        _instance_id := "discard_reviewed_instances".instance_id;
-        _remarks := "discard_reviewed_instances".remarks;
+        _instance_id := discard_reviewed_instances.instance_id;
+        _remarks := discard_reviewed_instances.remarks;
         -- Record reviewers that have already reviewed the instance
         SELECT ARRAY_AGG(reviewer_id) INTO reviewers
         FROM instance_review review
