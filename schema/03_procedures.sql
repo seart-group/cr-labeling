@@ -21,14 +21,14 @@ AS $$
     DECLARE
         _instance_id integer;
         _remarks text;
-        reviewer integer;
-        reviewers integer[];
+        _reviewer integer;
+        _reviewers integer[];
     BEGIN
         -- Copy parameters to avoid ambiguity
         _instance_id := conflict_resolution_discard.instance_id;
         _remarks := conflict_resolution_discard.remarks;
         -- Record reviewers that have already reviewed the instance
-        SELECT ARRAY_AGG(reviewer_id) INTO reviewers
+        SELECT ARRAY_AGG(reviewer_id) INTO _reviewers
         FROM instance_review review
         WHERE review.instance_id = _instance_id;
         -- Clean labels and reviews related to the instance
@@ -39,10 +39,10 @@ AS $$
         );
         DELETE FROM instance_review review WHERE review.instance_id = _instance_id;
         -- Add a discard entry for each previous reviewer
-        FOREACH reviewer IN ARRAY reviewers
+        FOREACH _reviewer IN ARRAY _reviewers
         LOOP
             INSERT INTO instance_discard(instance_id, reviewer_id, remarks)
-            VALUES (_instance_id, reviewer, _remarks);
+            VALUES (_instance_id, _reviewer, _remarks);
         END LOOP;
         -- Update existing instance discards with the provided remarks
         UPDATE instance_discard AS discard
