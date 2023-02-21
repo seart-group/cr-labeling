@@ -16,7 +16,7 @@ END;
 $$ LANGUAGE PLpgSQL;
 
 CREATE OR REPLACE PROCEDURE
-    "discard_reviewed_instances"(instance_id integer, remarks text)
+    "conflict_resolution_discard"(instance_id integer, remarks text)
 AS $$
     DECLARE
         _instance_id integer;
@@ -25,8 +25,8 @@ AS $$
         reviewers integer[];
     BEGIN
         -- Copy parameters to avoid ambiguity
-        _instance_id := discard_reviewed_instances.instance_id;
-        _remarks := discard_reviewed_instances.remarks;
+        _instance_id := conflict_resolution_discard.instance_id;
+        _remarks := conflict_resolution_discard.remarks;
         -- Record reviewers that have already reviewed the instance
         SELECT ARRAY_AGG(reviewer_id) INTO reviewers
         FROM instance_review review
