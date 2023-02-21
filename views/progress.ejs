@@ -16,12 +16,12 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <% reviewers.forEach((reviewer) => {%>
+                                <% reviewers.forEach((reviewer) => { %>
                                     <tr>
                                         <th scope="row"><%- reviewer.name %></th>
                                         <td class="text-end"><%- reviewer.progress %></td>
                                     </tr>
-                                <%}); %>
+                                <% }); %>
                             </tbody>
                         </table>
                     </div>
