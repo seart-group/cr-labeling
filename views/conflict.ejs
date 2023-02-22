@@ -1,19 +1,19 @@
 <%
     Array.prototype.union = function (other) {
         return Array.from(new Set(this.concat(other)));
-    }
+    };
 
     Array.prototype.intersection = function (other) {
         return Array.from(new Set(this.filter((element) => other.includes(element))));
-    }
+    };
 
     Array.prototype.difference = function (other) {
         return Array.from(new Set(this.filter((element) => !other.includes(element))));
-    }
+    };
 
     Date.prototype.toHumanReadableString = function () {
         return this.toLocaleString('en-GB').replace(",", "");
-    }
+    };
 
     const labels_union = reviews.map((review) => review.labels).reduce((l1, l2) => l1.union(l2));
     const labels_intersection = reviews.map((review) => review.labels).reduce((l1, l2) => l1.intersection(l2));
