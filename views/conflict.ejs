@@ -215,6 +215,9 @@
                     <div class="col-12 col-md-6 d-grid d-md-block text-md-end">
                         <button type="button"
                                 class="btn btn-primary"
+                                data-bs-toggle="offcanvas"
+                                data-bs-target="#label-offcanvas"
+                                aria-controls="label-offcanvas"
                                 autofocus
                         >
                             Label
@@ -229,6 +232,113 @@
                         >
                             Discard
                         </button>
+                    </div>
+                </div>
+                <div id="label-offcanvas"
+                     class="offcanvas offcanvas-start"
+                     aria-labelledby="label-offcanvas-title"
+                     tabindex="-1"
+                >
+                    <div class="offcanvas-header">
+                        <h5 class="offcanvas-title" id="label-offcanvas-title">Assign Labels</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close">
+                        </button>
+                    </div>
+                    <div class="offcanvas-body">
+                        <form id="label-add" class="mb-2">
+                            <div class="input-group">
+                                <input type="text"
+                                       id="label-add-input"
+                                       class="form-control"
+                                       placeholder="Define a new label..."
+                                       aria-describedby="label-add-button"
+                                       aria-label="New Label"
+                                       required
+                                />
+                                <button type="submit" id="label-add-button" class="btn btn-dark">
+                                    Add!
+                                </button>
+                            </div>
+                        </form>
+                        <input type="text"
+                               id="label-filter"
+                               class="form-control mb-2"
+                               placeholder="Filter existing labels..."
+                               aria-label="Filter Labels"
+                        />
+                        <form id="label-instance">
+                            <select id="label-instance-select"
+                                    class="form-select mb-2"
+                                    aria-label="Assign Labels"
+                                    size="10"
+                                    multiple
+                                    required
+                            >
+                                <%
+                                    labels.forEach(label => {
+                                        const agree = labels_intersection.includes(label.name);
+                                        const disagree = labels_difference.includes(label.name);
+                                        let label_class;
+                                        if (agree) label_class = "agree";
+                                        else if (disagree) label_class = "disagree";
+                                        else label_class = "regular";
+                                %>
+                                    <option value="<%- label.id %>"
+                                            <%- (agree) ? "selected" : "" %>
+                                            class="option-<%- label_class %>"
+                                    ><%- label.name %></option>
+                                <%
+                                    });
+                                %>
+                            </select>
+                            <p class="text-center text-muted user-select-none border rounded mb-2">
+                                Hold <i class="bi bi-command"></i> to select multiple labels
+                            </p>
+                            <div class="form-check mb-2">
+                                <input id="label-instance-interesting"
+                                       class="form-check-input"
+                                       type="checkbox"
+                                       value=""
+                                />
+                                <label for="label-instance-interesting" class="form-check-label">
+                                    This instance is interesting
+                                </label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input id="label-instance-invert"
+                                       class="form-check-input"
+                                       type="checkbox"
+                                       value=""
+                                        <%- (instance.category === "C") ? "disabled" : "" %>
+                                />
+                                <label for="label-instance-invert" class="form-check-label">
+                                    This instance is actually correct
+                                </label>
+                            </div>
+                            <div class="form-group mb-2">
+                                <label for="label-instance-remarks">Remarks</label>
+                                <textarea id="label-instance-remarks"
+                                          class="form-control"
+                                          style="resize: none"
+                                          rows="10"
+                                ></textarea>
+                            </div>
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    Label Instance!
+                                </button>
+                            </div>
+                        </form>
+                        <%-
+                            include(
+                                './partials/toast',
+                                {
+                                    id: "label-add-toast",
+                                    body: "Label already exists!",
+                                    variant: "danger"
+                                }
+                            )
+                        %>
                     </div>
                 </div>
                 <div id="discard-offcanvas"
@@ -373,6 +483,15 @@
         <script>
             const socket = io();
             const instance_id = Number(`<%- instance.id %>`);
+            const labelFilter = document.getElementById("label-filter");
+            const labelAddForm = document.getElementById("label-add");
+            const labelAddInput = document.getElementById("label-add-input");
+            const labelAddToast = document.getElementById("label-add-toast");
+            const labelInstance = document.getElementById("label-instance");
+            const labelInstanceSelect = document.getElementById("label-instance-select");
+            const labelInstanceInteresting = document.getElementById("label-instance-interesting");
+            const labelInstanceInvert = document.getElementById("label-instance-invert");
+            const labelInstanceRemarks = document.getElementById("label-instance-remarks");
             const discardInstance = document.getElementById("discard-instance");
             const discardOptions = document.getElementsByName("discard-option");
             const discardOptionOther = document.getElementById("discard-option-other");
@@ -386,6 +505,66 @@
             const normalize = (name) => {
                 return name.replaceAll(/\s+/g, " ").toLowerCase().trim();
             };
+
+            // TODO: Use binary search as opposed to iterating over the options
+            const addOption = (label) => {
+                const search = normalize(labelFilter.value);
+                const created_option = new Option(label.name, label.id);
+                const created_option_classes = created_option.classList;
+                if (!label.name.includes(search)) {
+                    created_option_classes.add("d-none");
+                }
+                const existing_options = labelInstanceSelect.options;
+                for (let idx = 0; idx < existing_options.length; idx++) {
+                    const current_option = existing_options.item(idx);
+                    if (created_option.innerHTML < current_option.innerHTML) {
+                        labelInstanceSelect.insertBefore(created_option, current_option);
+                        break;
+                    } else if (idx === existing_options.length - 1) {
+                        labelInstanceSelect.appendChild(created_option);
+                    }
+                }
+            };
+
+            labelFilter.addEventListener("input", () => {
+                const search = normalize(labelFilter.value);
+                const existing_options = labelInstanceSelect.options;
+                for (let idx = 0; idx < existing_options.length; idx++) {
+                    const current_option = existing_options.item(idx);
+                    const current_option_classes = current_option.classList;
+                    const label = current_option.innerHTML;
+                    if (label.includes(search)) {
+                        current_option_classes.remove("d-none");
+                    } else {
+                        current_option_classes.add("d-none");
+                    }
+                }
+            });
+
+            labelAddForm.addEventListener("submit", (event) => {
+                event.preventDefault();
+                const name = normalize(labelAddInput.value);
+                labelAddInput.value = null;
+                axios.post("/label", { name: name })
+                    .then(({ data: label }) => {
+                        addOption(label);
+                        socket.emit("label_added", label);
+                    })
+                    .catch(() => toast(labelAddToast));
+            });
+
+            labelInstance.addEventListener("submit", (event) => {
+                event.preventDefault();
+                const selected = [ ...labelInstanceSelect.selectedOptions ].map(({ value }) => Number(value));
+                const url = `/conflicts/${instance_id}/review`;
+                const payload = {
+                    label_ids: selected,
+                    is_interesting: labelInstanceInteresting.checked,
+                    invert_category: labelInstanceInvert.checked,
+                    remarks: labelInstanceRemarks.value || null
+                };
+                axios.post(url, payload).then(redirect);
+            });
 
             discardOptionOther.addEventListener("change", () => {
                 discardOptionOtherValue.required = true;
@@ -410,6 +589,7 @@
                 axios.post(url, payload).then(redirect);
             });
 
+            socket.on("label_append", (label) => addOption(label));
             socket.on("disconnect", () => toast(socketDisconnectToast));
             socket.io.on("reconnect", () => toast(socketReconnectToast));
         </script>
