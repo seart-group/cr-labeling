@@ -170,6 +170,18 @@ app.get("/conflicts/:id", async (req, res) => {
     });
 });
 
+app.post("/conflicts/:id/review", (req, res) => {
+    const params = [
+        req.params.id,
+        req.body.label_ids,
+        req.body.is_interesting,
+        req.body.invert_category,
+        req.body.remarks
+    ];
+    pool.query("CALL conflict_resolution_review($1, $2, $3, $4, $5)", params)
+        .then(() => res.status(201).end());
+});
+
 app.post("/conflicts/:id/discard", (req, res) => {
     const params = [ req.params.id, req.body.remarks ];
     pool.query("CALL conflict_resolution_discard($1, $2)", params)
