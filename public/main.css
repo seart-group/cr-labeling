@@ -3,3 +3,15 @@
 {
     width: 550px!important;
 }
+
+.option-agree:not(:checked) {
+    background-color: rgba(var(--bs-success-rgb), 0.35);
+}
+
+.option-disagree:not(:checked) {
+    background-color: rgba(var(--bs-danger-rgb), 0.35);
+}
+
+.option-regular:not(:checked) {
+    background-color: inherit;
+}
