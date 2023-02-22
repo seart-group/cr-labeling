@@ -377,7 +377,12 @@
 
                 // TODO: Use binary search as opposed to iterating over the options
                 const addOption = (label) => {
+                    const search = normalize(labelFilter.value);
                     const created_option = new Option(label.name, label.id);
+                    const created_option_classes = created_option.classList;
+                    if (!label.name.includes(search)) {
+                        created_option_classes.add("d-none");
+                    }
                     const existing_options = labelInstanceSelect.options;
                     for (let idx = 0; idx < existing_options.length; idx++) {
                         const current_option = existing_options.item(idx);
