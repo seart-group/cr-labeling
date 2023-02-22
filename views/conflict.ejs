@@ -215,6 +215,7 @@
                     <div class="col-12 col-md-6 d-grid d-md-block text-md-end">
                         <button type="button"
                                 class="btn btn-primary"
+                                autofocus
                         >
                             Label
                         </button>
@@ -222,9 +223,125 @@
                     <div class="col-12 col-md-6 d-grid d-md-block text-md-start">
                         <button type="button"
                                 class="btn btn-danger"
+                                data-bs-toggle="offcanvas"
+                                data-bs-target="#discard-offcanvas"
+                                aria-controls="discard-offcanvas"
                         >
                             Discard
                         </button>
+                    </div>
+                </div>
+                <div id="discard-offcanvas"
+                     class="offcanvas offcanvas-end"
+                     aria-labelledby="discard-offcanvas-title"
+                >
+                    <div class="offcanvas-header">
+                        <h5 class="offcanvas-title" id="discard-offcanvas-title">Provide Additional Information</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close">
+                        </button>
+                    </div>
+                    <div class="offcanvas-body">
+                        <form id="discard-instance">
+                            <div class="form-group mb-2">
+                                <div class="form-check">
+                                    <input type="radio"
+                                           id="discard-option-1"
+                                           class="form-check-input"
+                                           name="discard-option"
+                                           value="1"
+                                           required
+                                    />
+                                    <label id="discard-option-1-value"
+                                           class="form-check-label"
+                                           for="discard-option-1"
+                                    >
+                                        Revised code doesn't implement the reviewer's comment
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input type="radio"
+                                           id="discard-option-2"
+                                           class="form-check-input"
+                                           name="discard-option"
+                                           value="2"
+                                           required
+                                    />
+                                    <label id="discard-option-2-value"
+                                           class="form-check-label"
+                                           for="discard-option-2"
+                                    >
+                                        Reviewer's comment is unclear even for a human given the context
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input type="radio"
+                                           id="discard-option-3"
+                                           class="form-check-input"
+                                           name="discard-option"
+                                           value="3"
+                                           required
+                                    />
+                                    <label id="discard-option-3-value"
+                                           class="form-check-label"
+                                           for="discard-option-3"
+                                    >
+                                        Reviewer's comment is at class level
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input type="radio"
+                                           id="discard-option-4"
+                                           class="form-check-input"
+                                           name="discard-option"
+                                           value="4"
+                                           required
+                                    />
+                                    <label id="discard-option-4-value"
+                                           class="form-check-label"
+                                           for="discard-option-4"
+                                    >
+                                        Reviewer's comment is not asking for a code change
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input type="radio"
+                                           id="discard-option-5"
+                                           class="form-check-input"
+                                           name="discard-option"
+                                           value="5"
+                                           required
+                                    />
+                                    <label id="discard-option-5-value"
+                                           class="form-check-label"
+                                           for="discard-option-5"
+                                    >
+                                        Reviewer's comment is linked to a wrong code instance
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input type="radio"
+                                           id="discard-option-other"
+                                           class="form-check-input"
+                                           name="discard-option"
+                                           value="other"
+                                           required
+                                    />
+                                    <label class="form-check-label" for="discard-option-other">
+                                        Other:
+                                    </label>
+                                    <input type="text"
+                                           id="discard-option-other-value"
+                                           class="form-control"
+                                           aria-label="Other Reason Input"
+                                    />
+                                </div>
+                            </div>
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-danger btn-lg">
+                                    Discard Instance!
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
                 <%-
@@ -255,10 +372,43 @@
         <script src="/socket.io/socket.io.js"></script>
         <script>
             const socket = io();
+            const instance_id = Number(`<%- instance.id %>`);
+            const discardInstance = document.getElementById("discard-instance");
+            const discardOptions = document.getElementsByName("discard-option");
+            const discardOptionOther = document.getElementById("discard-option-other");
+            const discardOptionOtherValue = document.getElementById("discard-option-other-value");
             const socketDisconnectToast = document.getElementById("socket-disconnect-toast");
             const socketReconnectToast = document.getElementById("socket-reconnect-toast");
 
+            const redirect = () => window.location.replace("/conflicts");
             const toast = (element) => new bootstrap.Toast(element).show();
+
+            const normalize = (name) => {
+                return name.replaceAll(/\s+/g, " ").toLowerCase().trim();
+            };
+
+            discardOptionOther.addEventListener("change", () => {
+                discardOptionOtherValue.required = true;
+                discardOptionOtherValue.setAttribute("pattern", ".*\\S+.*");
+            });
+
+            [ ...discardOptions ].slice(0, -1).forEach((option) => {
+                option.addEventListener("change", () => {
+                    discardOptionOtherValue.required = false;
+                    discardOptionOtherValue.removeAttribute("pattern");
+                });
+            });
+
+            discardInstance.addEventListener("submit", (event) => {
+                event.preventDefault();
+                const [ selectedOption ] = [ ...discardOptions ].filter(option => option.checked)
+                    .map(option => option.value);
+                const target = document.getElementById(`discard-option-${selectedOption}-value`);
+                const remarks = normalize((selectedOption === "other") ? target.value : target.innerHTML);
+                const url = `/conflicts/${instance_id}/discard`;
+                const payload = { remarks: remarks || null };
+                axios.post(url, payload).then(redirect);
+            });
 
             socket.on("disconnect", () => toast(socketDisconnectToast));
             socket.io.on("reconnect", () => toast(socketReconnectToast));
