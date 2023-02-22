@@ -151,7 +151,7 @@ app.get("/conflicts", async (req, res) => {
 });
 
 app.get("/conflicts/:id", async (req, res) => {
-    let params = [ req.params.id ];
+    const params = [ req.params.id ];
     const { rows: [ instance ] } = await pool.query("SELECT * FROM instance_review_conflict WHERE id = $1", params);
     if (!instance) {
         res.render("error", {
