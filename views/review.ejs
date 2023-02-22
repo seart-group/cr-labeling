@@ -452,7 +452,7 @@
                     const [ selectedOption ] = [ ...discardOptions ].filter(option => option.checked)
                                                                     .map(option => option.value);
                     const target = document.getElementById(`discard-option-${selectedOption}-value`);
-                    const remarks =  normalize((selectedOption === "other") ? target.value : target.innerHTML);
+                    const remarks = normalize((selectedOption === "other") ? target.value : target.innerHTML);
                     const payload = {
                         instance_id: instance_id,
                         reviewer_id: reviewer_id,
