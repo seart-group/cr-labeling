@@ -53,7 +53,7 @@ LEFT OUTER JOIN instance_review review ON reviewer.id = review.reviewer_id
 GROUP BY reviewer.id
 ORDER BY reviewer.id;
 
-CREATE OR REPLACE VIEW "instance_review_conflict" AS
+CREATE OR REPLACE VIEW "instance_review_conflict_label" AS
 SELECT DISTINCT instance.* FROM instance
 INNER JOIN instance_review_finished AS finished ON instance.id = finished.id
 INNER JOIN instance_review AS review ON finished.id = review.instance_id
@@ -67,11 +67,87 @@ HAVING
         FROM instance_review
         WHERE instance_review.instance_id = instance.id
     )
-OR
+ORDER BY instance.id;
+
+CREATE OR REPLACE VIEW "instance_review_conflict_category" AS
+SELECT instance.* FROM instance
+INNER JOIN instance_review_finished AS finished ON instance.id = finished.id
+INNER JOIN instance_review AS review ON finished.id = review.instance_id
+GROUP BY instance.id
+HAVING
+    bool_or(review.invert_category)
+AND
+    NOT bool_and(review.invert_category)
+ORDER BY instance.id;
+
+CREATE OR REPLACE VIEW "instance_review_conflict_outcome" AS
+WITH instance_join_review AS (
+    SELECT instance.*
+    FROM instance
+    INNER JOIN instance_review review ON instance.id = review.instance_id
+), instance_join_discard AS (
+    SELECT instance.*
+    FROM instance
+    INNER JOIN instance_discard discard ON instance.id = discard.instance_id
+)
+SELECT instance.* FROM instance
+WHERE
+    EXISTS(SELECT FROM instance_join_review WHERE id = instance.id)
+AND
+    EXISTS(SELECT FROM instance_join_discard WHERE id = instance.id)
+AND
     (
-        bool_or(review.invert_category) AND NOT bool_and(review.invert_category)
+        SELECT COUNT(*)
+        FROM instance_join_review
+        WHERE id = instance.id
+    ) >= (
+        SELECT COUNT(*)
+        FROM instance_join_discard
+        WHERE id = instance.id
     )
 ORDER BY instance.id;
+
+CREATE OR REPLACE VIEW "instance_review_conflict" AS
+WITH conflict_union AS (
+    SELECT
+        conflict_label.*,
+        '1'::conflict AS conflict
+    FROM instance_review_conflict_label AS conflict_label
+    UNION
+    SELECT
+        conflict_category.*,
+        '2'::conflict AS conflict
+    FROM instance_review_conflict_category AS conflict_category
+    UNION
+    SELECT
+        conflict_outcome.*,
+        '3'::conflict AS conflict
+    FROM instance_review_conflict_outcome AS conflict_outcome
+)
+SELECT
+    conflict_union.id AS id,
+    conflict_union.task AS task,
+    conflict_union.work AS work,
+    conflict_union.category AS category,
+    conflict_union.input_code AS input_code,
+    conflict_union.input_nl AS input_nl,
+    conflict_union.output AS output,
+    conflict_union.target AS target,
+    ARRAY_AGG(
+        conflict_union.conflict
+        ORDER BY conflict
+    ) AS conflicts
+FROM conflict_union
+GROUP BY
+    conflict_union.id,
+    conflict_union.task,
+    conflict_union.work,
+    conflict_union.category,
+    conflict_union.input_code,
+    conflict_union.input_nl,
+    conflict_union.output,
+    conflict_union.target
+ORDER BY conflict_union.id;
 
 CREATE OR REPLACE FUNCTION
     "complement"(category category)
