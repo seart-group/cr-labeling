@@ -16,16 +16,23 @@ END;
 $$ LANGUAGE PLpgSQL;
 
 CREATE OR REPLACE PROCEDURE
-    "conflict_resolution_discard"(instance_id integer, remarks text)
+    "conflict_resolution_discard"(
+        instance_id integer,
+        conflicts conflict[],
+        remarks text
+    )
 AS $$
     DECLARE
         _instance_id integer;
+        _conflict conflict;
+        _conflicts conflict[];
         _remarks text;
         _reviewer integer;
         _reviewers integer[];
     BEGIN
         -- Copy parameters to avoid ambiguity
         _instance_id := conflict_resolution_discard.instance_id;
+        _conflicts := conflict_resolution_discard.conflicts;
         _remarks := conflict_resolution_discard.remarks;
         -- Record reviewers that have already reviewed the instance
         SELECT ARRAY_AGG(reviewer_id) INTO _reviewers
@@ -48,20 +55,29 @@ AS $$
         UPDATE instance_discard AS discard
         SET remarks = _remarks
         WHERE discard.instance_id = _instance_id;
+        -- Record conflict resolution
+        FOREACH _conflict IN ARRAY _conflicts
+        LOOP
+            INSERT INTO instance_review_conflict_resolution(instance_id, conflict)
+            VALUES (_instance_id, _conflict);
+        END LOOP;
     END;
 $$ LANGUAGE PLpgSQL;
 
 CREATE OR REPLACE PROCEDURE
     "conflict_resolution_review"(
-    instance_id integer,
-    label_ids integer[],
-    is_interesting boolean,
-    invert_category boolean,
-    remarks text
-)
+        instance_id integer,
+        conflicts conflict[],
+        label_ids integer[],
+        is_interesting boolean,
+        invert_category boolean,
+        remarks text
+    )
 AS $$
     DECLARE
         _instance_id integer;
+        _conflict conflict;
+        _conflicts conflict[];
         _label_id integer;
         _label_ids integer[];
         _review_id integer;
@@ -74,6 +90,7 @@ AS $$
     BEGIN
         -- Copy parameters to avoid ambiguity
         _instance_id := conflict_resolution_review.instance_id;
+        _conflicts := conflict_resolution_review.conflicts;
         _label_ids := conflict_resolution_review.label_ids;
         _is_interesting := conflict_resolution_review.is_interesting;
         _invert_category := conflict_resolution_review.invert_category;
@@ -105,6 +122,12 @@ AS $$
                 INSERT INTO instance_review_label(instance_review_id, label_id)
                 VALUES (_review_id, _label_id);
             END LOOP;
+        END LOOP;
+        -- Record conflict resolution
+        FOREACH _conflict IN ARRAY _conflicts
+        LOOP
+            INSERT INTO instance_review_conflict_resolution(instance_id, conflict)
+            VALUES (_instance_id, _conflict);
         END LOOP;
     END;
 $$ LANGUAGE PLpgSQL;
