@@ -69,6 +69,13 @@ CREATE TABLE "instance_review_label" (
   PRIMARY KEY ("instance_review_id", "label_id")
 );
 
+CREATE TABLE "instance_review_conflict_resolution" (
+  "instance_id" integer,
+  "conflict" conflict NOT NULL,
+  "resolved_at" timestamp DEFAULT (now()),
+  PRIMARY KEY ("instance_id", "conflict")
+);
+
 CREATE UNIQUE INDEX ON "instance_review" ("instance_id", "reviewer_id");
 
 ALTER TABLE "instance_review" ADD FOREIGN KEY ("instance_id") REFERENCES "instance" ("id");
@@ -77,3 +84,4 @@ ALTER TABLE "instance_discard" ADD FOREIGN KEY ("instance_id") REFERENCES "insta
 ALTER TABLE "instance_discard" ADD FOREIGN KEY ("reviewer_id") REFERENCES "reviewer" ("id");
 ALTER TABLE "instance_review_label" ADD FOREIGN KEY ("instance_review_id") REFERENCES "instance_review" ("id");
 ALTER TABLE "instance_review_label" ADD FOREIGN KEY ("label_id") REFERENCES "label" ("id");
+ALTER TABLE "instance_review_conflict_resolution" ADD FOREIGN KEY ("instance_id") REFERENCES "instance" ("id");
