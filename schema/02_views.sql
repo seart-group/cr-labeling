@@ -16,16 +16,20 @@ ORDER BY
 
 CREATE OR REPLACE VIEW "instance_review_finished" AS
 SELECT
-    instance.id,
-    instance.task,
-    instance.work,
+    instance.id AS id,
+    instance.task AS task,
+    instance.work AS work,
     CASE WHEN EVERY(review.invert_category)
-         THEN COMPLEMENT(instance.category)
-         ELSE instance.category
-    END AS category
+        THEN COMPLEMENT(instance.category)
+        ELSE instance.category
+    END AS category,
+    instance.input_code AS input_code,
+    instance.input_nl AS input_nl,
+    instance.output AS output,
+    instance.target AS target
 FROM instance
 INNER JOIN instance_review AS review ON instance.id = review.instance_id
-GROUP BY instance.id, instance.task, instance.work
+GROUP BY instance.id
 HAVING COUNT(review.id) >= 2;
 
 CREATE OR REPLACE VIEW "instance_review_bucket" AS
