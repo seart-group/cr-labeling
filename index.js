@@ -1,5 +1,6 @@
 const { Pool } = require("pg");
 const { PostgresError: PGError } = require("pg-error-enum");
+const { parse: parsePGArray } = require("postgres-array");
 const { Server: IO } = require("socket.io");
 
 require("dotenv").config();
@@ -159,11 +160,7 @@ app.get("/conflicts/:id", async (req, res) => {
             title: "Conflict not found or already resolved!"
         });
     }
-    instance.conflicts = instance.conflicts
-        .replace("{", "")
-        .replace("}", "")
-        .split(",")
-        .map(String);
+    instance.conflicts = parsePGArray(instance.conflicts);
     const { rows: reviews } = await pool.query("SELECT * FROM instance_review_details($1)", params);
     const { rows: discards } = await pool.query("SELECT * FROM instance_discard_details($1)", params);
     const { rows: labels } = await pool.query("SELECT * FROM label ORDER BY name");
