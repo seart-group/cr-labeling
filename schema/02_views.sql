@@ -113,12 +113,12 @@ WITH conflict_union AS (
         conflict_label.*,
         '1'::conflict AS conflict
     FROM instance_review_conflict_label AS conflict_label
-    UNION
+    UNION ALL
     SELECT
         conflict_category.*,
         '2'::conflict AS conflict
     FROM instance_review_conflict_category AS conflict_category
-    UNION
+    UNION ALL
     SELECT
         conflict_outcome.*,
         '3'::conflict AS conflict
