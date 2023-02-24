@@ -4,6 +4,10 @@
     width: 550px!important;
 }
 
+.page-item.disabled {
+    cursor: not-allowed!important;
+}
+
 .option-agree:not(:checked) {
     background-color: rgba(var(--bs-success-rgb), 0.35);
 }
