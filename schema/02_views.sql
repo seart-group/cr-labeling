@@ -90,18 +90,25 @@ CREATE OR REPLACE FUNCTION
     "next_instance"(reviewer_id integer)
     RETURNS SETOF instance
 AS $$
+    WITH reviewed AS (
+        SELECT review.instance_id AS instance_id
+        FROM instance_review AS review
+        WHERE review.reviewer_id = next_instance.reviewer_id
+    ), discarded AS (
+        SELECT discard.instance_id AS instance_id
+        FROM instance_discard AS discard
+        WHERE discard.reviewer_id = next_instance.reviewer_id
+    )
     SELECT candidate.* FROM instance_review_candidate AS candidate
     WHERE
-        candidate.id NOT IN (
-            SELECT review.instance_id
-            FROM instance_review AS review
-            WHERE review.reviewer_id = next_instance.reviewer_id
+        NOT EXISTS(
+            SELECT FROM reviewed
+            WHERE instance_id = candidate.id
         )
     AND
-        candidate.id NOT IN (
-            SELECT discard.instance_id
-            FROM instance_discard AS discard
-            WHERE discard.reviewer_id = next_instance.reviewer_id
+        NOT EXISTS(
+            SELECT FROM discarded
+            WHERE instance_id = candidate.id
         )
     AND
         NOT EXISTS(
