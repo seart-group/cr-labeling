@@ -10,6 +10,12 @@ CREATE TYPE "category" AS ENUM (
   'W'
 );
 
+CREATE TYPE "conflict" AS ENUM (
+  '1',
+  '2',
+  '3'
+);
+
 CREATE TYPE "work" AS ENUM (
   '1',
   '2',
