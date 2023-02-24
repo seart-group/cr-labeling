@@ -159,6 +159,11 @@ app.get("/conflicts/:id", async (req, res) => {
             title: "Conflict not found or already resolved!"
         });
     }
+    instance.conflicts = instance.conflicts
+        .replace("{", "")
+        .replace("}", "")
+        .split(",")
+        .map(String);
     const { rows: reviews } = await pool.query("SELECT * FROM instance_review_details($1)", params);
     const { rows: discards } = await pool.query("SELECT * FROM instance_discard_details($1)", params);
     const { rows: labels } = await pool.query("SELECT * FROM label ORDER BY name");
