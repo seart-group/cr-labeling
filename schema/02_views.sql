@@ -125,29 +125,22 @@ WITH conflict_union AS (
     FROM instance_review_conflict_outcome AS conflict_outcome
 )
 SELECT
-    conflict_union.id AS id,
-    conflict_union.task AS task,
-    conflict_union.work AS work,
-    conflict_union.category AS category,
-    conflict_union.input_code AS input_code,
-    conflict_union.input_nl AS input_nl,
-    conflict_union.output AS output,
-    conflict_union.target AS target,
+    instance.id AS id,
+    instance.task AS task,
+    instance.work AS work,
+    instance.category AS category,
+    instance.input_code AS input_code,
+    instance.input_nl AS input_nl,
+    instance.output AS output,
+    instance.target AS target,
     ARRAY_AGG(
         conflict_union.conflict
         ORDER BY conflict
     ) AS conflicts
-FROM conflict_union
-GROUP BY
-    conflict_union.id,
-    conflict_union.task,
-    conflict_union.work,
-    conflict_union.category,
-    conflict_union.input_code,
-    conflict_union.input_nl,
-    conflict_union.output,
-    conflict_union.target
-ORDER BY conflict_union.id;
+FROM instance
+INNER JOIN conflict_union ON instance.id = conflict_union.id
+GROUP BY instance.id
+ORDER BY instance.id;
 
 CREATE OR REPLACE FUNCTION
     "complement"(category category)
