@@ -45,7 +45,23 @@
         <%- include('./partials/scripts/general'); %>
         <script src="https://cdn.jsdelivr.net/npm/twbs-pagination@1.4.2/jquery.twbsPagination.min.js" integrity="sha384-AzpIEA+V2ntWh1KXh0Nz69l/mYOfBMOiw6lbuvWaVKYfuEooT5t5k/qyU0W0B7uk" crossorigin="anonymous"></script>
         <script>
-            $('#conflicts-pagination').twbsPagination({
+            window.addEventListener("load", () => {
+                const params = new URLSearchParams(location.search);
+                let reload = false;
+                if (!params.has("page")) {
+                    params.append("page", "1");
+                    reload = true;
+                }
+                if (!params.has("limit")) {
+                    params.append("limit", "10");
+                    reload = true;
+                }
+                if (reload) {
+                    location.search = params.toString();
+                }
+            });
+
+            $("#conflicts-pagination").twbsPagination({
                 visiblePages: 5,
                 hideOnlyOnePage: true,
                 initiateStartPageClick: false,
