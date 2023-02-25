@@ -72,7 +72,7 @@
                 next: `<i class="bi bi-chevron-right"></i>`,
                 last: `<i class="bi bi-chevron-double-right"></i>`,
                 onPageClick: function (_, page) {
-                    window.open(`/conflicts?page=${page}`, "_self");
+                    location.search = location.search.replace(/page=[^&$]*/i, `page=${page}`);
                 }
             });
         </script>
