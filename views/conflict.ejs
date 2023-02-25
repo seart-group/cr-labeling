@@ -144,29 +144,40 @@
                                             %>
                                         </div>
                                         <div class="p-2">
-                                            <%
-                                                let category_inverse;
-                                                switch (instance.category) {
-                                                case "C":
-                                                    category_inverse = "wrong";
-                                                    break;
-                                                case "W":
-                                                    category_inverse = "correct";
-                                                    break;
-                                                default:
-                                                    category_inverse = "???";
-                                                }
-
-                                                if (instance.category === "W") {
-                                            %>
-                                                Should be <%- category_inverse %>:
+                                            <div>
+                                                Interesting:
                                                 <input type="checkbox"
                                                        class="form-check-input"
-                                                       aria-label="Should be opposite category"
+                                                       aria-label="Instance is interesting"
                                                        disabled
-                                                       <%- (review.invert_category) ? "checked" : "" %>
+                                                        <%- (review.is_interesting) ? "checked" : "" %>
                                                 />
-                                            <% } %>
+                                            </div>
+                                            <div>
+                                                <%
+                                                    let category_inverse;
+                                                    switch (instance.category) {
+                                                    case "C":
+                                                        category_inverse = "wrong";
+                                                        break;
+                                                    case "W":
+                                                        category_inverse = "correct";
+                                                        break;
+                                                    default:
+                                                        category_inverse = "???";
+                                                    }
+
+                                                    if (instance.category === "W") {
+                                                %>
+                                                    Actually <%- category_inverse %>:
+                                                    <input type="checkbox"
+                                                           class="form-check-input"
+                                                           aria-label="Should be opposite category"
+                                                           disabled
+                                                            <%- (review.invert_category) ? "checked" : "" %>
+                                                    />
+                                                <% } %>
+                                            </div>
                                         </div>
                                         <% if (review.remarks) { %>
                                             <label class="px-2" for="reviewer-<%- review.reviewer_id %>-remark">
