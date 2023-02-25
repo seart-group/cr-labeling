@@ -33,8 +33,17 @@
                                 });
                             %>
                         </div>
-                        <nav aria-label="Page navigation">
-                            <ul id="conflicts-pagination" class="pagination justify-content-center"></ul>
+                    </div>
+                    <div class="col-12">
+                        <nav aria-label="Page navigation" class="d-flex justify-content-center">
+                            <ul id="conflicts-pagination" class="pagination mb-0 me-2"></ul>
+                            <select id="conflicts-sort-select"
+                                    class="form-select w-auto"
+                                    aria-label="Conflict Sort Order By ID"
+                            >
+                                <option <%- (locals.pagination.id > 0) ? "selected" : "" %> value="1">Ascending</option>
+                                <option <%- (locals.pagination.id < 0) ? "selected" : "" %> value="-1">Descending</option>
+                            </select>
                         </nav>
                     </div>
                 </div>
@@ -56,10 +65,21 @@
                     params.append("limit", "10");
                     reload = true;
                 }
+                if (!params.has("id")) {
+                    params.append("id", "1");
+                    reload = true;
+                }
                 if (reload) {
                     location.search = params.toString();
                 }
             });
+
+            document.getElementById("conflicts-sort-select")
+                .addEventListener("change", (event) => {
+                    const order = event.target.value;
+                    location.search = location.search.replace(/id=[^&$]*/i, `id=${order}`);
+                }
+            );
 
             $("#conflicts-pagination").twbsPagination({
                 visiblePages: 5,
