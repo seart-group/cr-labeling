@@ -212,6 +212,7 @@ CREATE OR REPLACE FUNCTION
     RETURNS TABLE (
         reviewer_id integer,
         reviewer_name text,
+        is_interesting boolean,
         invert_category boolean,
         reviewed_at timestamp,
         remarks text,
@@ -224,6 +225,7 @@ AS $$
         SELECT
             reviewer.id AS reviewer_id,
             reviewer.name AS reviewer_name,
+            review.is_interesting AS is_interesting,
             review.invert_category AS invert_category,
             review.reviewed_at AS reviewed_at,
             review.remarks AS remarks,
@@ -237,6 +239,7 @@ AS $$
         GROUP BY
             reviewer.id,
             reviewer.name,
+            review.is_interesting,
             review.invert_category,
             review.reviewed_at,
             review.remarks;
