@@ -35,7 +35,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(paginate.middleware(10, 50));
 
 app.get("/", (req, res) => {
-    res.redirect(`${req.baseUrl}/login`);
+    res.render("index");
 });
 
 app.get("/login", async (_, res) => {

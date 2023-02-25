@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Code Review Labeling</title>
+        <%- include('./partials/head/meta'); %>
+        <%- include('./partials/head/link'); %>
+    </head>
+    <body class="vh-100 vw-100 d-flex flex-column justify-content-between">
+        <%- include('./partials/header'); %>
+        <main>
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <h1 class="text-center mb-3">Welcome!</h1>
+                    </div>
+                </div>
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 row-cols-xl-6 justify-content-center g-4">
+                    <div class="col">
+                        <div class="card">
+                            <a href="/login" class="fs-4 card-link link-secondary text-decoration-none">
+                                <%- include('./partials/placeholder', { class: "card-img", text: "Login", title: "Login" }); %>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card">
+                            <a href="/conflicts" class="fs-4 card-link link-secondary text-decoration-none">
+                                <%- include('./partials/placeholder', { class: "card-img", text: "Conflicts", title: "Conflicts" }); %>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card">
+                            <a href="/progress" class="fs-4 card-link link-secondary text-decoration-none">
+                                <%- include('./partials/placeholder', { class: "card-img", text: "Progress", title: "Progress" }); %>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <%- include('./partials/footer'); %>
+        <%- include('./partials/scripts/general'); %>
+    </body>
+</html>
