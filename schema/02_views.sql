@@ -81,29 +81,43 @@ AND
 ORDER BY instance.id;
 
 CREATE OR REPLACE VIEW "instance_review_conflict_outcome" AS
-WITH instance_join_review AS (
-    SELECT instance.*
-    FROM instance
-    INNER JOIN instance_review review ON instance.id = review.instance_id
-), instance_join_discard AS (
-    SELECT instance.*
-    FROM instance
-    INNER JOIN instance_discard discard ON instance.id = discard.instance_id
+WITH instance_review_outcomes AS (
+    SELECT
+        instance_id AS id,
+        'R' AS outcome
+    FROM instance_review
+    UNION ALL
+    SELECT
+        instance_id AS id,
+        'D' AS outcome
+    FROM instance_discard
+), instance_review_and_discard AS (
+    SELECT outcomes.*
+    FROM instance_review_outcomes AS outcomes
+    WHERE EXISTS(
+        SELECT FROM instance_review_outcomes AS self
+        WHERE
+            self.id = outcomes.id
+        AND
+            self.outcome IS DISTINCT FROM outcomes.outcome
+    )
 )
 SELECT instance.* FROM instance
-WHERE
-    EXISTS(SELECT FROM instance_join_review WHERE id = instance.id)
-AND
-    EXISTS(SELECT FROM instance_join_discard WHERE id = instance.id)
-AND
-    (
-        SELECT COUNT(*)
-        FROM instance_join_review
-        WHERE id = instance.id
-    ) >= (
-        SELECT COUNT(*)
-        FROM instance_join_discard
-        WHERE id = instance.id
+INNER JOIN instance_review_and_discard AS review_and_discard
+    ON instance.id = review_and_discard.id
+GROUP BY instance.id
+HAVING
+    SUM(
+        CASE WHEN review_and_discard.outcome = 'R'
+            THEN 1
+            ELSE 0
+        END
+    ) >=
+    SUM(
+        CASE WHEN review_and_discard.outcome = 'D'
+            THEN 1
+            ELSE 0
+        END
     )
 ORDER BY instance.id;
 
