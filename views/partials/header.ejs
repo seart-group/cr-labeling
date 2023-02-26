@@ -1,41 +1,46 @@
 <header class="mb-3">
-    <% if (!!locals.reviewer) { %>
-        <nav class="navbar navbar-expand-lg bg-light">
-            <div class="container-fluid">
-                <button type="button"
-                        class="navbar-toggler"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#reviewer-navigation-dropdown"
-                        aria-controls="reviewer-navigation-dropdown"
-                        aria-label="Toggle navigation"
-                        aria-expanded="false"
-                >
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div id="reviewer-navigation-dropdown" class="collapse navbar-collapse">
-                    <ul class="navbar-nav">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-person-fill"></i>
-                                <span class="navbar-brand m-0 h1">
-                                    <%- locals.reviewer.name %>
-                                </span>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="/progress">Progress</a></li>
-                                <li><a class="dropdown-item" href="/login">Login</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-                <div class="d-flex">
-                    <span>Instances Reviewed:</span>
-                    &nbsp;
-                    <span class="font-monospace">
-                        <%- locals.reviewer.progress || 0 %>
+    <nav class="navbar navbar-expand-lg bg-light">
+        <div class="container-fluid">
+            <div class="navbar-brand">
+                <% if (!!locals.reviewer) { %>
+                    <i class="bi bi-person-fill"></i>
+                    <span class="navbar-brand m-0 h1">
+                        <%- locals.reviewer.name %>
                     </span>
-                </div>
+                <% } %>
             </div>
-        </nav>
-    <% } %>
+            <button type="button"
+                    class="navbar-toggler"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbar"
+                    aria-controls="navbar"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation"
+            >
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div id="navbar" class="collapse navbar-collapse">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/progress">Progress</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/conflicts">Conflicts</a>
+                    </li>
+                </ul>
+                <% if (!!locals.reviewer) { %>
+                    <div class="ms-auto py-2">
+                        <span>Instances Reviewed:</span>
+                        &nbsp;
+                        <span class="font-monospace">
+                            <%- locals.reviewer.progress || 0 %>
+                        </span>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </nav>
 </header>
