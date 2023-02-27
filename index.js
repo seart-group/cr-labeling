@@ -130,6 +130,18 @@ app.post("/label", (req, res) => {
         });
 });
 
+app.get("/instances/:id", async (req, res) => {
+    const params = [ req.params.id ];
+    const { rows: [ instance ] } = await pool.query("SELECT * FROM instance WHERE id = $1", params);
+    if (!instance) {
+        res.render("error", {
+            icon: "bi-none",
+            title: "Instance does not exist!"
+        });
+    }
+    res.render("instance", { instance: instance });
+});
+
 app.get("/conflicts", async (req, res) => {
     const current = req.query.page || 1;
     const limit = req.query.limit || 10;

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Code Review Labeling - Conflict Resolution</title>
+        <%- include('./partials/head/meta'); %>
+        <%- include('./partials/head/link'); %>
+    </head>
+    <body class="vh-100 vw-100 d-flex flex-column justify-content-between">
+        <%- include('./partials/header'); %>
+        <main>
+            <div class="container">
+                <%
+                    let task_title;
+                    switch (instance.task) {
+                    case "C&NL2C":
+                        task_title = "Code & Natural Language to Code";
+                        break;
+                    case "C2NL":
+                        task_title = "Code to Natural Language";
+                        break;
+                    default:
+                        task_title = "Unknown";
+                    }
+                %>
+                <div class="row">
+                    <div class="col d-flex justify-content-start">
+                        <h1 class="mb-3" title="<%- task_title %>">
+                            <%- instance.task %>
+                        </h1>
+                    </div>
+                    <div class="col d-flex justify-content-end">
+                        <span class="mb-3 h1">
+                            <%- include('./partials/instance/category-icon', { category: instance.category }); %>
+                        </span>
+                    </div>
+                </div>
+                <div class="row">
+                    <% const language = instance.task === "C&NL2C" ? "java" : "plaintext"; %>
+                    <div class="col-12 col-md-6 col-lg overflow-hidden">
+                        <label class="mb-2">Input Source Code</label>
+                        <%-
+                            include(
+                                './partials/instance/code-display',
+                                {
+                                    language: "java",
+                                    input: instance.input_code
+                                }
+                            );
+                        %>
+                        <label class="mb-2">Input Comment</label>
+                        <%-
+                            include(
+                                './partials/instance/code-display',
+                                {
+                                    language: "plaintext",
+                                    input: instance.input_nl
+                                }
+                            );
+                        %>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg overflow-hidden">
+                        <label class="mb-2">Actual Output</label>
+                        <%-
+                            include(
+                                './partials/instance/code-display',
+                                {
+                                    language: language,
+                                    input: instance.output
+                                }
+                            );
+                        %>
+                        <label class="mb-2">Expected Output</label>
+                        <%-
+                            include(
+                                './partials/instance/code-display',
+                                {
+                                    language: language,
+                                    input: instance.target
+                                }
+                            );
+                        %>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <%- include('./partials/footer'); %>
+        <%- include('./partials/scripts/general'); %>
+        <%- include('./partials/scripts/hljs'); %>
+    </body>
+</html>
