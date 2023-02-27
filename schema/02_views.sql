@@ -4,15 +4,20 @@ CREATE OR REPLACE FUNCTION -- redefined later
 AS $$ BEGIN RETURN NULL; END; $$ LANGUAGE PLpgSQL;
 
 CREATE OR REPLACE VIEW "instance_review_candidate" AS
+WITH instance_review_or_discard AS (
+    SELECT instance_id AS id
+    FROM instance_review
+    UNION ALL
+    SELECT instance_id AS id
+    FROM instance_discard
+)
 SELECT instance.* FROM instance
-LEFT OUTER JOIN instance_review AS review ON instance.id = review.instance_id
-LEFT OUTER JOIN instance_discard AS discard ON instance.id = discard.instance_id
-GROUP BY instance.id, discard.instance_id
-HAVING COUNT(review.id) < 2
-ORDER BY
-    COUNT(review.id) DESC,
-    discard.instance_id IS NOT NULL DESC,
-    RANDOM();
+LEFT JOIN instance_review_or_discard AS review_or_discard
+    ON instance.id = review_or_discard.id
+GROUP BY instance.id
+HAVING COUNT(instance.id) < 2
+ORDER BY COUNT(review_or_discard.id) DESC,
+         RANDOM();
 
 CREATE OR REPLACE VIEW "instance_review_finished" AS
 SELECT
