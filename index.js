@@ -159,8 +159,9 @@ app.get("/instances/:id", async (req, res) => {
             icon: "bi-none",
             title: "Instance does not exist!"
         });
+    } else {
+        res.render("instance", { instance: instance });
     }
-    res.render("instance", { instance: instance });
 });
 
 app.get("/conflicts", async (req, res) => {
@@ -194,17 +195,18 @@ app.get("/conflicts/:id", async (req, res) => {
             icon: "bi-none",
             title: "Conflict not found or already resolved!"
         });
+    } else {
+        instance.conflicts = parsePGArray(instance.conflicts);
+        const { rows: reviews } = await pool.query("SELECT * FROM instance_review_details($1)", params);
+        const { rows: discards } = await pool.query("SELECT * FROM instance_discard_details($1)", params);
+        const { rows: labels } = await pool.query("SELECT * FROM label ORDER BY name");
+        res.render("conflict", {
+            instance: instance,
+            reviews: reviews,
+            discards: discards,
+            labels: labels
+        });
     }
-    instance.conflicts = parsePGArray(instance.conflicts);
-    const { rows: reviews } = await pool.query("SELECT * FROM instance_review_details($1)", params);
-    const { rows: discards } = await pool.query("SELECT * FROM instance_discard_details($1)", params);
-    const { rows: labels } = await pool.query("SELECT * FROM label ORDER BY name");
-    res.render("conflict", {
-        instance: instance,
-        reviews: reviews,
-        discards: discards,
-        labels: labels
-    });
 });
 
 app.post("/conflicts/:id/review", (req, res) => {
