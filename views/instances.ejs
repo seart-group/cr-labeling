@@ -36,9 +36,25 @@
                     </div>
                     <div class="col-12">
                         <nav aria-label="Page navigation" class="d-flex flex-wrap justify-content-center">
-                            <ul id="instances-pagination" class="pagination mb-3 mb-md-0 me-md-2"></ul>
+                            <ul id="instances-pagination" class="pagination mb-3 mb-lg-0 me-md-2"></ul>
+                            <form id="instances-pagination-jump" class="input-group w-auto mb-3 mb-lg-0 me-2">
+                                <input type="number"
+                                       id="instances-pagination-jump-input"
+                                       aria-describedby="instances-pagination-jump-button"
+                                       aria-label="Page number"
+                                       placeholder="Jump to page..."
+                                       class="form-control"
+                                       min="0"
+                                />
+                                <button type="button"
+                                        id="instances-pagination-jump-button"
+                                        class="btn btn-dark"
+                                >
+                                    Go!
+                                </button>
+                            </form>
                             <select id="instances-sort-select"
-                                    class="form-select w-auto"
+                                    class="form-select w-auto mb-3 mb-md-0"
                                     aria-label="Instance Sort Order By ID"
                             >
                                 <option <%- (locals.pagination.id > 0) ? "selected" : "" %> value="1">Ascending</option>
@@ -73,6 +89,21 @@
                     location.search = params.toString();
                 }
             });
+
+            document.getElementById("instances-pagination-jump-input")
+                .addEventListener("input", (event) => {
+                    const min = Number(event.target.min);
+                    const value = Number(event.target.value);
+                    const abs = Math.abs(value);
+                    event.target.value = !!value && abs >= min ? abs : null;
+                });
+
+            document.getElementById("instances-pagination-jump")
+                .addEventListener("submit", (event) => {
+                    event.preventDefault();
+                    const page = document.getElementById("instances-pagination-jump-input").value;
+                    location.search = location.search.replace(/page=[^&$]*/i, `page=${page}`);
+                });
 
             document.getElementById("instances-sort-select")
                 .addEventListener("change", (event) => {
