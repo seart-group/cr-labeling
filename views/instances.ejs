@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Code Review Labeling - Instances</title>
+        <%- include('./partials/head/meta'); %>
+        <%- include('./partials/head/link'); %>
+    </head>
+    <body class="vh-100 vw-100 d-flex flex-column justify-content-between">
+        <%- include('./partials/header'); %>
+        <main>
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <h1 class="text-center mb-3">
+                            Instances: <%- pagination.items %>
+                        </h1>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <div class="list-group mb-3">
+                            <%
+                                instances.forEach((instance) => {
+                                    const id = instance.id;
+                            %>
+                                <a id="instance-<%- id %>"
+                                   href="/instances/<%- id %>"
+                                   class="list-group-item list-group-item-dark list-group-item-action font-monospace"
+                                >
+                                    Instance: <%- id %>
+                                </a>
+                            <%
+                                });
+                            %>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <nav aria-label="Page navigation" class="d-flex flex-wrap justify-content-center">
+                            <ul id="instances-pagination" class="pagination mb-3 mb-md-0 me-md-2"></ul>
+                            <select id="instances-sort-select"
+                                    class="form-select w-auto"
+                                    aria-label="Instance Sort Order By ID"
+                            >
+                                <option <%- (locals.pagination.id > 0) ? "selected" : "" %> value="1">Ascending</option>
+                                <option <%- (locals.pagination.id < 0) ? "selected" : "" %> value="-1">Descending</option>
+                            </select>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <%- include('./partials/footer'); %>
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.3/dist/jquery.min.js" integrity="sha384-Ft/vb48LwsAEtgltj7o+6vtS2esTU9PCpDqcXs4OCVQFZu5BqprHtUCZ4kjK+bpE" crossorigin="anonymous"></script>
+        <%- include('./partials/scripts/general'); %>
+        <script src="https://cdn.jsdelivr.net/npm/twbs-pagination@1.4.2/jquery.twbsPagination.min.js" integrity="sha384-AzpIEA+V2ntWh1KXh0Nz69l/mYOfBMOiw6lbuvWaVKYfuEooT5t5k/qyU0W0B7uk" crossorigin="anonymous"></script>
+        <script>
+            window.addEventListener("load", () => {
+                const params = new URLSearchParams(location.search);
+                let reload = false;
+                if (!params.has("page")) {
+                    params.append("page", "1");
+                    reload = true;
+                }
+                if (!params.has("limit")) {
+                    params.append("limit", "10");
+                    reload = true;
+                }
+                if (!params.has("id")) {
+                    params.append("id", "1");
+                    reload = true;
+                }
+                if (reload) {
+                    location.search = params.toString();
+                }
+            });
+
+            document.getElementById("instances-sort-select")
+                .addEventListener("change", (event) => {
+                    const order = event.target.value;
+                    location.search = location.search.replace(/id=[^&$]*/i, `id=${order}`);
+                }
+            );
+
+            $("#instances-pagination").twbsPagination({
+                visiblePages: 5,
+                hideOnlyOnePage: true,
+                initiateStartPageClick: false,
+                startPage: Number(`<%- paginate.page %>`),
+                totalPages: Number(`<%- pagination.pages %>`),
+                first: `<i class="bi bi-chevron-double-left"></i>`,
+                prev: `<i class="bi bi-chevron-left"></i>`,
+                next: `<i class="bi bi-chevron-right"></i>`,
+                last: `<i class="bi bi-chevron-double-right"></i>`,
+                onPageClick: function (_, page) {
+                    location.search = location.search.replace(/page=[^&$]*/i, `page=${page}`);
+                }
+            });
+        </script>
+    </body>
+</html>
