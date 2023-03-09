@@ -131,3 +131,67 @@ AS $$
         END LOOP;
     END;
 $$ LANGUAGE PLpgSQL;
+
+CREATE OR REPLACE PROCEDURE "export_csv"()
+AS $$
+    -- Export reviews with all information
+    COPY (
+        SELECT
+            finished.id AS id,
+            finished.task AS task,
+            finished.work AS work,
+            finished.category AS category,
+            finished.input_code AS input_code,
+            finished.input_nl AS input_nl,
+            finished.output AS output,
+            finished.target AS target,
+            STRING_AGG(
+                DISTINCT label.name,
+                ',' ORDER BY label.name
+            ) AS labels,
+            STRING_AGG(
+                DISTINCT review.remarks,
+                ',' ORDER BY review.remarks
+            ) AS remarks,
+            BOOL_OR(review.is_interesting) AS is_interesting
+        FROM instance_review_finished AS finished
+        INNER JOIN instance_review review
+            ON finished.id = review.instance_id
+        INNER JOIN instance_review_label review_label
+            ON review.id = review_label.instance_review_id
+        INNER JOIN label
+            ON label.id = review_label.label_id
+        GROUP BY
+            finished.id,
+            finished.task,
+            finished.work,
+            finished.category,
+            finished.input_code,
+            finished.input_nl,
+            finished.output,
+            finished.target
+    ) TO '/tmp/instance_review.csv' WITH CSV DELIMITER ',' HEADER;
+    -- Export discards with all information
+    COPY (
+        SELECT
+            instance.*,
+            STRING_AGG(
+                DISTINCT discard.remarks,
+                ',' ORDER BY discard.remarks
+            ) AS remarks
+        FROM instance
+        INNER JOIN instance_discard AS discard
+            ON instance.id = discard.instance_id
+        GROUP BY instance.id
+    ) TO '/tmp/instance_discard.csv' WITH CSV DELIMITER ',' HEADER;
+    -- Export resolved conflicts
+    COPY (
+        SELECT
+            resolution.instance_id AS instance_id,
+            STRING_AGG(
+                resolution.conflict::text, ','
+            ) AS conflicts
+        FROM instance_review_conflict_resolution AS resolution
+        GROUP BY resolution.instance_id
+    ) TO '/tmp/instance_review_conflict_resolution.csv' WITH CSV DELIMITER ',' HEADER;
+$$ LANGUAGE SQL;
